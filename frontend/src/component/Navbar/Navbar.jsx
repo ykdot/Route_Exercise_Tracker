@@ -21,7 +21,7 @@ function Navbar() {
       <nav className={`${classes['link-nav']} ${classes[mobileShow]}`}>
         <Link className={classes['link-button']}>Home</Link>
         <Link className={classes['link-button']}>Routes</Link>
-        <Link className={classes['link-button']}>Log In</Link>
+        <Link to='/authenticate' className={classes['link-button']}>Log In</Link>
 
       </nav>
     </nav>

@@ -1,0 +1,57 @@
+input:focus {
+  outline:none;
+}
+
+.auth-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 4rem 4rem;
+  border-radius: 2rem;
+  width: 25rem;
+  height: 25rem;
+  background-color: aquamarine;
+}
+
+.title {
+  text-align: center;
+  padding-bottom: 3rem;
+}
+
+.label-title {
+  font-weight: 300;
+  color: rgb(100, 86, 86);
+}
+
+.input-title {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #000000;
+}
+
+.submit-button {
+  border: none;
+  border-radius: 2rem;
+  padding: 0.5rem;
+  color: white;
+  cursor: pointer;
+  background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+  linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+  linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+}
+
+.alt-button {
+  text-align: center;
+  text-decoration: none;
+  background-color: transparent;
+  color: black;
+  border: none;
+  cursor: pointer;
+  width: 4rem;
+}
+
+@media (max-width: 500px) {
+  .auth-box {
+    padding: 2rem 2rem;
+  }
+}
