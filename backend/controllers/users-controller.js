@@ -124,7 +124,11 @@ const createUser = async(req, res, next) => {
     return next(error);
   }
 
-  res.status(201).json({ token: token });
+  res.status(201).json({  
+    userID: newUser.id,
+    username: newUser.username,
+    token: token
+  });
 }
 
 exports.login = login;
