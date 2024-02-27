@@ -18,6 +18,12 @@ input:focus {
   padding-bottom: 3rem;
 }
 
+.error-message {
+  color: red;
+  position: absolute;
+  margin-top: 2rem;
+}
+
 .label-title {
   font-weight: 300;
   color: rgb(100, 86, 86);

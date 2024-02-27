@@ -4,12 +4,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from './pages/Layout.jsx';
 import AuthenticationPage from './pages/AuthenticationPage.jsx';
 import RouteTrackerContext from "./store/route-tracker-contex.jsx";
+import HomePage from "./pages/HomePage.jsx";
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
     children: [
+      { path: '/', element: <HomePage />},
       { path: '/login', element: <AuthenticationPage version={'login'}/>},
       { path: '/signup', element: <AuthenticationPage version={'signup'}/>}
 
