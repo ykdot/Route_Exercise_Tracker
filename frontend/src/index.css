@@ -7,6 +7,11 @@ dialog {
   border: none !important;
 }
 
+.leaf-container {
+  height: 20vh;
+  width: 50rem;
+}
+
 
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

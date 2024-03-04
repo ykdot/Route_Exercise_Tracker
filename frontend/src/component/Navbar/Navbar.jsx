@@ -24,7 +24,7 @@ function Navbar() {
       </button>
       <nav className={`${classes['link-nav']} ${classes[mobileShow]}`}>
         <Link className={classes['link-button']}>Home</Link>
-        <Link className={classes['link-button']}>Routes</Link>
+        <Link to='/route' className={classes['link-button']}>Routes</Link>
         {!auth.isLoggedIn && <Link to='/login' className={classes['link-button']}>Log In</Link>}
         {auth.isLoggedIn && <button className={classes['link-button']} onClick={auth.logout}>Log Out</button>}
         {auth.isLoggedIn && <Link className={classes['link-button']}>{auth.username}</Link>}
