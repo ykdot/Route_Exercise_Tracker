@@ -1,6 +1,9 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const tj = require('@mapbox/togeojson');
+const fs = require('fs');
+const DOMParser = require('xmldom').DOMParser;
 
 const User = require('../models/user.js');
 const HttpError = require('../models/http-error.js');
@@ -131,5 +134,20 @@ const createUser = async(req, res, next) => {
   });
 }
 
+const getTestRoute = async(req, res, next) => {
+  const gpx = new DOMParser().parseFromString(fs.readFileSync('./test.GPX', 'utf8'));
+  const converted = tj.gpx(gpx);
+
+  const coord = converted.features[0].geometry.coordinates;
+
+  for (let i = 0; i < coord.length; i++) {
+    coord[i].pop();
+    [coord[i][0], coord[i][1]] = [coord[i][1], coord[i][0]];
+  }
+  
+  res.status(200).json({coordinates: coord })
+}
+
 exports.login = login;
 exports.createUser = createUser;
+exports.getTestRoute = getTestRoute;
