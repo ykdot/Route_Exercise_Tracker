@@ -163,7 +163,6 @@ const connectToPolarAPI = async(req, res, next) => {
       // proper user check needed later 
       const responseData = await data.json();
       console.log(responseData); 
-      // setRouteData(responseData.coordinates);  
     }
     response();    
   }catch(err) {
@@ -178,9 +177,6 @@ const getTestRoute = async(req, res, next) => {
   const converted = tj.gpx(gpx);
 
   const coord = converted.features[0].geometry.coordinates;
-
-
-  console.log(auth);
 
   for (let i = 0; i < coord.length; i++) {
     coord[i].pop();
