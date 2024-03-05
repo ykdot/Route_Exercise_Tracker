@@ -8,6 +8,7 @@ const RouteTrackerContext = createContext({
   token: null,
   login: () => {},
   logout: () => {},
+  api: false
 });
 
 export default RouteTrackerContext;

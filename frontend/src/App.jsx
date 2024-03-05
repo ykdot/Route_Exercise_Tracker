@@ -77,7 +77,8 @@ function App() {
         username: username,
         userID: userID,
         login: login,
-        logout: logout          
+        logout: logout,
+        api: false          
       }}>
       <RouterProvider router={router}/>
     </RouteTrackerContext.Provider>

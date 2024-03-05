@@ -17,14 +17,14 @@ function RoutePage() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
-          },
+          },  
         });
 
         // proper user check needed later 
         const responseData = await data.json();
         setRouteData(responseData.coordinates);
       }
-      response();
+      response(); 
     }catch(err) {
       throw new Error(err);
     }
