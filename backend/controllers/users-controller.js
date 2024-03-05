@@ -7,6 +7,7 @@ const DOMParser = require('xmldom').DOMParser;
 
 const User = require('../models/user.js');
 const HttpError = require('../models/http-error.js');
+const basic_auth = process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET;
 
 const login = async(req, res, next) => {
   const { username, password } = req.body;
@@ -134,11 +135,52 @@ const createUser = async(req, res, next) => {
   });
 }
 
+const connectToPolarAPI = async(req, res, next) => {
+  const code = req.body.code;
+  
+  // console.log(code);
+  const api_auth = 'Basic ' + btoa(basic_auth);
+  const api_data = new URLSearchParams({
+    'grant_type': "authorization_code",
+    'code': code,
+    // 'redirect_uri': 'http://localhost:5173'
+  }) ;
+  console.log(api_data.toString());
+
+  try {
+    const response = async () => {
+      const data = await fetch(`https://polarremote.com/v2/oauth2/token`, 
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': api_auth,
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json;charset=UTF-8'
+        },
+        body: api_data.toString()
+      }); 
+
+      // proper user check needed later 
+      const responseData = await data.json();
+      console.log(responseData); 
+      // setRouteData(responseData.coordinates);  
+    }
+    response();    
+  }catch(err) {
+    throw new Error(err);
+  }
+
+  res.status(201).json({code: code});
+}
+
 const getTestRoute = async(req, res, next) => {
   const gpx = new DOMParser().parseFromString(fs.readFileSync('./test.GPX', 'utf8'));
   const converted = tj.gpx(gpx);
 
   const coord = converted.features[0].geometry.coordinates;
+
+
+  console.log(auth);
 
   for (let i = 0; i < coord.length; i++) {
     coord[i].pop();
@@ -150,4 +192,5 @@ const getTestRoute = async(req, res, next) => {
 
 exports.login = login;
 exports.createUser = createUser;
+exports.connectToPolarAPI = connectToPolarAPI;
 exports.getTestRoute = getTestRoute;

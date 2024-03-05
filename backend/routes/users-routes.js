@@ -10,6 +10,7 @@ router.get('/');
 // authentication
 router.post('/login', userController.login);
 router.post('/create', userController.createUser);
+router.post('/connect-api', userController.connectToPolarAPI);
 router.get('/get-route', userController.getTestRoute);
 
 
