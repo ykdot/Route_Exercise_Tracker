@@ -7,7 +7,6 @@ function HomePage() {
   const auth = useContext(RouteTrackerContext);
 
   const url = window.location.href;
-  const test = '12345:verySecret';
 
   const authenticatePolarUser = async () => {
     const code = new URL(url).searchParams.get("code"); 
@@ -35,14 +34,10 @@ function HomePage() {
       throw new Error(err);
     }    
   }
-  console.log(btoa(test));
-  console.log(window.location.href);
+  
   if (url !== 'http://localhost:5173/' && !auth.api) {
     authenticatePolarUser();
-    auth.api = true;
-    // useEffect(() => {
-
-    // }, [])    
+    auth.api = true; 
   } 
 
   function redirectToPolar() {
