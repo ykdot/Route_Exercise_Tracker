@@ -34,6 +34,7 @@ function Login() {
       }
       auth.login(responseData.userID, responseData.username, responseData.token); 
       redirect('/');
+      console.log(auth.username);
       // window.location.reload();      
     } catch(err) {
       setError(err.message || "Something went wrong!")
