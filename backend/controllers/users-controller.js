@@ -136,40 +136,68 @@ const createUser = async(req, res, next) => {
 }
 
 const connectToPolarAPI = async(req, res, next) => {
+  // code === authentication code from Polar
   const code = req.body.code;
   
-  // console.log(code);
   const api_auth = 'Basic ' + btoa(basic_auth);
   const api_data = new URLSearchParams({
     'grant_type': "authorization_code",
     'code': code,
     // 'redirect_uri': 'http://localhost:5173'
   }) ;
-  console.log(api_data.toString());
 
+  let accessToken;
   try {
-    const response = async () => {
-      const data = await fetch(`https://polarremote.com/v2/oauth2/token`, 
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': api_auth,
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept': 'application/json;charset=UTF-8'
-        },
-        body: api_data.toString()
-      }); 
+    const data = await fetch(`https://polarremote.com/v2/oauth2/token`, 
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': api_auth,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json;charset=UTF-8'
+      },
+      body: api_data.toString()
+    }); 
 
-      // proper user check needed later 
-      const responseData = await data.json();
-      console.log(responseData); 
-    }
-    response();    
+    // proper user check needed later 
+    const responseData = await data.json();
+    accessToken = responseData.access_token;    
   }catch(err) {
     throw new Error(err);
   }
+  console.log(accessToken);
+  try {
+    let userAuthorization = 'Bearer ' + accessToken;
+    // const data = await fetch(`https://www.polaraccesslink.com/v3/users`, 
+    // {
+    //   method: 'POST',
+    //   headers: {
+    //     'Authorization': userAuthorization,
+    //     'Content-Type': 'application/json',
+    //     'Accept': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     "member-id": "User_id_999"
+    //   }) 
+    // }); 
+    const apiID = 59133268;
+    const data = await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}`, 
+    {
+      method: 'GET',
+      headers: {
+        'Authorization': userAuthorization,
+        'Accept': 'application/json'
+      }
+    }); 
 
-  res.status(201).json({code: code});
+    // proper user check needed later 
+    const responseData = await data.json();
+    console.log(responseData);  
+  }catch(err) {
+    throw new Error(err);
+  } 
+ 
+  res.status(201).json({ token: accessToken });
 }
 
 const getTestRoute = async(req, res, next) => {
