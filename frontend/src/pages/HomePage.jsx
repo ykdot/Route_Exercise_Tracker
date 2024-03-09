@@ -28,6 +28,9 @@ function HomePage() {
       // proper user check needed later 
       const responseData = await data.json();
       console.log(responseData); 
+      localStorage.setItem(
+        'apiToken', 
+        JSON.stringify({ token: responseData.token }));
       
     }catch(err) {
       throw new Error(err);
