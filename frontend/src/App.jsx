@@ -29,6 +29,10 @@ function App() {
   const [username, setUsername ] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
+  const [apiToken, setApiToken] = useState(false);
+  const [apiStatus, setApiStatus] = useState(false);
+
+
   const login = useCallback((uid, username, token, expirationDate ) => {
     auth.user = uid;
     setToken(token);
@@ -50,6 +54,14 @@ function App() {
     localStorage.removeItem('userData');
     window.location.reload(); 
   }, []);
+
+  // const apiLogin = useCallback((api) => {
+  //   setApiToken(api);
+  //   setApiStatus(true);
+  //   localStorage.setItem(
+  //     'apiData', 
+  //     JSON.stringify({ api: apiToken, status: apiStatus }));
+  // }, []);
 
   useEffect(() => {
     if (token && tokenExpirationDate) {
@@ -78,7 +90,8 @@ function App() {
         userID: userID,
         login: login,
         logout: logout,
-        api: false          
+        // apiStatus: apiStatus,
+        // apiLogin: apiLogin          
       }}>
       <RouterProvider router={router}/>
     </RouteTrackerContext.Provider>
