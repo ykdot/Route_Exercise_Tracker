@@ -202,7 +202,7 @@ const getTestRoute = async(req, res, next) => {
   
   res.status(200).json({coordinates: coord })
 }
-
+// transaction shelf life is 10 minutes; potentially no other transaction being able to be created in that timeframe
 const getNewData = async(req, res, next) => {
   const token = req.params.token;
   // i might have to include sending the polar id, other user information later
@@ -278,7 +278,7 @@ const filterExercise = async(exercises, token) => {
       const responseData = await data2.json();
       console.log(responseData);
       if (responseData["has-route"]) {
-        const coord = await getPoints(exercise[i], token);
+        const coord = await getPoints(exercises[i], token);
         responseData['coord'] = coord;
         list.push(responseData);
 
