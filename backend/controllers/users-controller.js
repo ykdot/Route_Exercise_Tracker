@@ -161,26 +161,15 @@ const connectToPolarAPI = async(req, res, next) => {
 
     // proper user check needed later 
     const responseData = await data.json();
-    accessToken = responseData.access_token;    
+    accessToken = responseData.access_token
+    // get / check the apiID to make sure the id connects with the user
   }catch(err) {
     throw new Error(err);
   }
   console.log(accessToken);
   try {
     let userAuthorization = 'Bearer ' + accessToken;
-    // const data = await fetch(`https://www.polaraccesslink.com/v3/users`, 
-    // {
-    //   method: 'POST',
-    //   headers: {
-    //     'Authorization': userAuthorization,
-    //     'Content-Type': 'application/json',
-    //     'Accept': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     "member-id": "User_id_999"
-    //   }) 
-    // }); 
-    const apiID = 59133268;
+    const apiID = process.env.USER_API_ID;
     const data = await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}`, 
     {
       method: 'GET',
@@ -214,7 +203,93 @@ const getTestRoute = async(req, res, next) => {
   res.status(200).json({coordinates: coord })
 }
 
+const getNewData = async(req, res, next) => {
+  const token = req.params.token;
+  // i might have to include sending the polar id, other user information later
+  const api_auth = 'Basic ' + btoa(basic_auth);
+  const userAuthorization = 'Bearer ' + token;
+  
+
+  // console.log(token);
+  let transactionID;
+  let list;
+  try {
+    // apiID should not be hard coded later
+    const apiID = process.env.USER_API_ID;
+
+    // get exercise transaction id to start working with data
+    const data = await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}/exercise-transactions`, 
+    {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': userAuthorization
+      }
+    });
+
+    // proper user check needed later 
+    const responseData = await data.json();
+    console.log(responseData); 
+
+    transactionID = responseData["transaction-id"];
+
+    // provides the list of exercises that is included in the transaction 
+    const data2 = await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}/exercise-transactions/${transactionID}`, 
+    {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': userAuthorization
+      },
+    });
+
+    // proper user check needed later 
+    const responseData2 = await data2.json();
+    console.log(responseData2.exercises); 
+    list = responseData2.exercises;
+  }catch(err) {
+    throw new Error(err);
+  } 
+  const filteredList = await filterExercise(list, token);
+
+  res.status(201).json({exercise: filteredList}); 
+}
+
+const filterExercise = async(exercises, token) => {
+  let userAuthorization = 'Bearer ' + token;
+
+  let list = [];
+  for (let i = 0; i < exercises.length; i++) {
+    try {
+      const data2 = await fetch(exercises[i], 
+      {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': userAuthorization
+        },
+        // body: {}
+      });
+  
+      // proper user check needed later 
+      const responseData2 = await data2.json();
+      console.log(responseData2);
+      if (responseData2["has-route"]) {
+        list.push(responseData2);
+      }
+    }catch(err) {
+      throw new Error(err);   
+    }    
+  }
+
+  return list;
+}
+
+
+
 exports.login = login;
 exports.createUser = createUser;
 exports.connectToPolarAPI = connectToPolarAPI;
 exports.getTestRoute = getTestRoute;
+
+exports.getNewData = getNewData;

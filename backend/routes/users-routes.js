@@ -13,5 +13,7 @@ router.post('/create', userController.createUser);
 router.post('/connect-api', userController.connectToPolarAPI);
 router.get('/get-route', userController.getTestRoute);
 
+router.get('/dummy-data/:token', userController.getNewData);
+
 
 module.exports = router;
