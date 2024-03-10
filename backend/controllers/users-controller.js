@@ -252,6 +252,10 @@ const getNewData = async(req, res, next) => {
   } 
   const filteredList = await filterExercise(list, token);
 
+
+  // add filteredList to the mongodb database
+
+
   res.status(201).json({exercise: filteredList}); 
 }
 
@@ -268,14 +272,16 @@ const filterExercise = async(exercises, token) => {
           'Accept': 'application/json',
           'Authorization': userAuthorization
         },
-        // body: {}
       });
   
       // proper user check needed later 
-      const responseData2 = await data2.json();
-      console.log(responseData2);
-      if (responseData2["has-route"]) {
-        list.push(responseData2);
+      const responseData = await data2.json();
+      console.log(responseData);
+      if (responseData["has-route"]) {
+        const coord = await getPoints(exercise[i], token);
+        responseData['coord'] = coord;
+        list.push(responseData);
+
       }
     }catch(err) {
       throw new Error(err);   
@@ -283,6 +289,53 @@ const filterExercise = async(exercises, token) => {
   }
 
   return list;
+}
+
+const getPoints = async(exerciseURL, token) => {
+  let userAuthorization = 'Bearer ' + token;
+
+  try {
+    const url = exerciseURL + '/gpx';
+    const data2 = await fetch(url, 
+    {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/gpx+xml',
+        'Authorization': userAuthorization
+      },
+    });
+
+    // proper user check needed later 
+    // const responseData2 = await data2.text();
+    const gpxFile = "./newPoints.gpx"
+    fs.writeFileSync(gpxFile, data2.text());
+    let coord = await getRoute(gpxFile);
+
+    console.log(coord);
+    fs.unlink(gpxFile, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });    
+  }catch(err) {
+    throw new Error(err);   
+  }    
+  
+  return coord; 
+}
+
+const getRoute = async(file) => {
+  const gpx = new DOMParser().parseFromString(fs.readFileSync(file, 'utf8'));
+  const converted = tj.gpx(gpx);
+
+  const coord = converted.features[0].geometry.coordinates;
+
+  for (let i = 0; i < coord.length; i++) {
+    coord[i].pop();
+    [coord[i][0], coord[i][1]] = [coord[i][1], coord[i][0]];
+  }
+  
+  return coord;
 }
 
 
