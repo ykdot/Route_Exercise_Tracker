@@ -37,6 +37,27 @@ function HomePage() {
     }    
   }
 
+  const getData = async() => {
+    try {
+      const data = await fetch(`http://localhost:5000/api/users/dummy-data/${JSON.parse(localStorage.getItem('apiToken')).token}`, 
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }); 
+
+      // proper user check needed later 
+      const responseData = await data.json();
+      console.log(responseData);   
+      localStorage.setItem(
+        'apiNewData', 
+        JSON.stringify({ transID: responseData.trans, list: responseData.exercise }));   
+    }catch(err) {
+      throw new Error(err);
+    }
+  }
+
   if (url !== 'http://localhost:5173/' && localStorage.getItem('apiSearch') === null) {
     authenticatePolarUser();
   } 
@@ -48,6 +69,7 @@ function HomePage() {
   return (
     <>
       {auth.isLoggedIn && <Link to='https://flow.polar.com/oauth2/authorization?response_type=code&client_id=08ae0351-2e51-4723-a705-fbadd45aa5fc'>Authentication</Link>}
+      {auth.isLoggedIn && <button onClick={getData}>get user data</button>}
     </>
   );
 }
