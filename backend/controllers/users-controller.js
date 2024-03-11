@@ -4,8 +4,11 @@ const jwt = require('jsonwebtoken');
 const tj = require('@mapbox/togeojson');
 const fs = require('fs');
 const DOMParser = require('xmldom').DOMParser;
+const mongoose = require('mongoose');
 
 const User = require('../models/user.js');
+const Route = require('../models/route.js');
+const RouteType = require('../models/routeType.js');
 const HttpError = require('../models/http-error.js');
 const basic_auth = process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET;
 
@@ -205,6 +208,7 @@ const getTestRoute = async(req, res, next) => {
 // transaction shelf life is 10 minutes; potentially no other transaction being able to be created in that timeframe
 const getNewData = async(req, res, next) => {
   const token = req.params.token;
+  const uid = req.params.uid;
   // i might have to include sending the polar id, other user information later
   const api_auth = 'Basic ' + btoa(basic_auth);
   const userAuthorization = 'Bearer ' + token;
@@ -259,7 +263,7 @@ const getNewData = async(req, res, next) => {
   res.status(201).json({exercise: filteredList}); 
 }
 
-const filterExercise = async(exercises, token) => {
+const filterExercise = async(uid, exercises, token) => {
   let userAuthorization = 'Bearer ' + token;
 
   let list = [];
@@ -281,7 +285,7 @@ const filterExercise = async(exercises, token) => {
         const coord = await getPoints(exercises[i], token);
         responseData['coord'] = coord;
         list.push(responseData);
-
+        await createRoute(uid, responseData, coord);
       }
     }catch(err) {
       throw new Error(err);   
@@ -339,6 +343,69 @@ const getRoute = async(file) => {
   }
   
   return coord;
+}
+
+const createRoute = async(uid, route, coord) => {
+  let user;
+  try {
+    user = await User.findById(uid);
+  } catch(err) {
+    return next(new HttpError('request error', 404));   
+  }
+
+  if (!user) {
+    return next(new HttpError('could not find user', 500));   
+  }
+
+  const createdRoute = new Route({
+    user: user,
+    type: route['detailed-sports-info'],
+    date: route['start-time'],
+    points: coord,
+    other: route
+  });
+
+  // user work
+  if (user.routes.get(route['detailed-sports-info']) === undefined) {
+    user.routes.set(route['detailed-sports-info'], []);
+  }
+  user.routes.get(route['detailed-sports-info']).push(createdRoute);
+
+
+
+  // routeType work
+  let routeType;
+  try {
+    routeType = await RouteType.findOne({type: route['detailed-sports-info']}).exec();
+  } catch(err) {
+    return next(new HttpError('request error for routeType', 404));
+  }  
+
+  if (!routeType) {
+    routeType = new RouteType({
+      type: route['detailed-sports-info'],
+      routes: []
+    });
+  }
+  routeType.routes.push(createdRoute);
+
+  try {
+    // transaction and sessions
+    // makes sure everything is good before putting both in the database
+    // manually create collection for posts
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdRoute.save( { session: sess });
+    await user.save({ session: sess });
+    await routeType.save({ session: sess });
+    await sess.commitTransaction();
+  } catch (err) {
+    const error = new HttpError(
+      err, 500
+      //"Creation of route type Failed", 500
+    );
+    return next(error);
+  }
 }
 
 
