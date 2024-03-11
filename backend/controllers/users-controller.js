@@ -292,7 +292,9 @@ const filterExercise = async(exercises, token) => {
 }
 
 const getPoints = async(exerciseURL, token) => {
+  console.log("testing");
   let userAuthorization = 'Bearer ' + token;
+  let coord;
 
   try {
     const url = exerciseURL + '/gpx';
@@ -308,8 +310,9 @@ const getPoints = async(exerciseURL, token) => {
     // proper user check needed later 
     // const responseData2 = await data2.text();
     const gpxFile = "./newPoints.gpx"
-    fs.writeFileSync(gpxFile, data2.text());
-    let coord = await getRoute(gpxFile);
+    const fileContent = await data2.text();
+    fs.writeFileSync(gpxFile, fileContent);
+    coord = await getRoute(gpxFile);
 
     console.log(coord);
     fs.unlink(gpxFile, (err) => {
