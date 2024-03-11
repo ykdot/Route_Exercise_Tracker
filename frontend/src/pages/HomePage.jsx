@@ -39,12 +39,16 @@ function HomePage() {
 
   const getData = async() => {
     try {
-      const data = await fetch(`http://localhost:5000/api/users/dummy-data/${JSON.parse(localStorage.getItem('apiToken')).token}`, 
+      const data = await fetch(`http://localhost:5000/api/users/dummy-data`, 
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+          token: JSON.parse(localStorage.getItem('apiToken')).token,
+          uid: JSON.parse(localStorage.getItem('userData')).userID
+        }) 
       }); 
 
       // proper user check needed later 
