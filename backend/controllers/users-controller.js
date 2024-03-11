@@ -254,7 +254,7 @@ const getNewData = async(req, res, next) => {
   }catch(err) {
     throw new Error(err);
   } 
-  const filteredList = await filterExercise(list, token);
+  const filteredList = await filterExercise(uid, list, token);
 
 
   // add filteredList to the mongodb database
@@ -356,6 +356,8 @@ const createRoute = async(uid, route, coord) => {
   if (!user) {
     return next(new HttpError('could not find user', 500));   
   }
+
+  console.log("testing");
 
   const createdRoute = new Route({
     user: user,
