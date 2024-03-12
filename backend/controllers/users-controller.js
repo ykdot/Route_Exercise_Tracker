@@ -207,10 +207,10 @@ const getTestRoute = async(req, res, next) => {
 }
 // transaction shelf life is 10 minutes; potentially no other transaction being able to be created in that timeframe
 const getNewData = async(req, res, next) => {
-  const token = req.params.token;
-  const uid = req.params.uid;
+  const token = req.body.token;
+  const uid = req.body.uid;
   // i might have to include sending the polar id, other user information later
-  const api_auth = 'Basic ' + btoa(basic_auth);
+  // const api_auth = 'Basic ' + btoa(basic_auth);
   const userAuthorization = 'Bearer ' + token;
   
 
@@ -220,6 +220,8 @@ const getNewData = async(req, res, next) => {
   try {
     // apiID should not be hard coded later
     const apiID = process.env.USER_API_ID;
+    console.log(apiID);
+    console.log(token);
 
     // get exercise transaction id to start working with data
     const data = await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}/exercise-transactions`, 
@@ -254,19 +256,18 @@ const getNewData = async(req, res, next) => {
   }catch(err) {
     throw new Error(err);
   } 
-  const filteredList = await filterExercise(uid, list, token);
+  const status = await filterExercise(uid, list, token);
+  if (status.code !== 201) {
+    throw status;
+  }
 
-
-  // add filteredList to the mongodb database
-
-
-  res.status(201).json({exercise: filteredList}); 
+  res.status(201); 
 }
 
 const filterExercise = async(uid, exercises, token) => {
   let userAuthorization = 'Bearer ' + token;
 
-  let list = [];
+  let status;
   for (let i = 0; i < exercises.length; i++) {
     try {
       const data2 = await fetch(exercises[i], 
@@ -280,23 +281,24 @@ const filterExercise = async(uid, exercises, token) => {
   
       // proper user check needed later 
       const responseData = await data2.json();
-      console.log(responseData);
       if (responseData["has-route"]) {
         const coord = await getPoints(exercises[i], token);
         responseData['coord'] = coord;
-        list.push(responseData);
-        await createRoute(uid, responseData, coord);
+        status = await createRoute(uid, responseData, coord);
+
+        if (status.code !== 201) {
+          return status;
+        }
       }
     }catch(err) {
       throw new Error(err);   
     }    
   }
 
-  return list;
+  return status;
 }
 
 const getPoints = async(exerciseURL, token) => {
-  console.log("testing");
   let userAuthorization = 'Bearer ' + token;
   let coord;
 
@@ -317,8 +319,6 @@ const getPoints = async(exerciseURL, token) => {
     const fileContent = await data2.text();
     fs.writeFileSync(gpxFile, fileContent);
     coord = await getRoute(gpxFile);
-
-    console.log(coord);
     fs.unlink(gpxFile, (err) => {
       if (err) {
         console.error(err);
@@ -346,50 +346,48 @@ const getRoute = async(file) => {
 }
 
 const createRoute = async(uid, route, coord) => {
+
+  // check if user exists
   let user;
   try {
     user = await User.findById(uid);
   } catch(err) {
-    return next(new HttpError('request error', 404));   
+    return new HttpError('request error', 404);   
   }
 
   if (!user) {
-    return next(new HttpError('could not find user', 500));   
+    return new HttpError('could not find user', 500);   
   }
 
-  console.log("testing");
-
+  // create new route
   const createdRoute = new Route({
     user: user,
-    type: route['detailed-sports-info'],
+    type: route['detailed-sport-info'],
     date: route['start-time'],
     points: coord,
     other: route
   });
 
-  // user work
-  if (user.routes.get(route['detailed-sports-info']) === undefined) {
-    user.routes.set(route['detailed-sports-info'], []);
+  // add new key if it doesn't exist in maps
+  if (user.routes.get(route['detailed-sport-info']) === undefined) {
+    user.routes.set(route['detailed-sport-info'], []);
   }
-  user.routes.get(route['detailed-sports-info']).push(createdRoute);
-
-
 
   // routeType work
   let routeType;
   try {
-    routeType = await RouteType.findOne({type: route['detailed-sports-info']}).exec();
+    routeType = await RouteType.findOne({type: route['detailed-sport-info']}).exec();
   } catch(err) {
-    return next(new HttpError('request error for routeType', 404));
+    return new HttpError('request error for routeType', 404);
   }  
 
+  // make new RouteType if route type for current route does not exist
   if (!routeType) {
     routeType = new RouteType({
-      type: route['detailed-sports-info'],
+      type: route['detailed-sport-info'],
       routes: []
     });
   }
-  routeType.routes.push(createdRoute);
 
   try {
     // transaction and sessions
@@ -397,17 +395,27 @@ const createRoute = async(uid, route, coord) => {
     // manually create collection for posts
     const sess = await mongoose.startSession();
     sess.startTransaction();
+
     await createdRoute.save( { session: sess });
+
+    user.routes.get(route['detailed-sport-info']).push(createdRoute._id);
     await user.save({ session: sess });
+  
+    routeType.routes.push(createdRoute);
     await routeType.save({ session: sess });
+
     await sess.commitTransaction();
   } catch (err) {
+    console.log(err);
     const error = new HttpError(
       err, 500
       //"Creation of route type Failed", 500
     );
-    return next(error);
+    return error;
   }
+
+  // temporary languuge for now
+  return new HttpError('Success', 201);
 }
 
 

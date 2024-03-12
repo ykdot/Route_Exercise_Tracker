@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const routeSchema = new Schema({
-  user: { type: mongoose.Types.ObjectId, required: true, ref: 'User'},
+  user: { type: mongoose.Types.ObjectId, required: true, ref: 'Route'},
   type: { type: String, required: true },
   date: { type: String, required: true },
   points: { type: Array, "default": [], required: true },
