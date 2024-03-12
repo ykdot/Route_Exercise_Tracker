@@ -62,6 +62,7 @@ function HomePage() {
     }
   }
 
+  // potential loopholes
   if (url !== 'http://localhost:5173/' && localStorage.getItem('apiSearch') === null) {
     authenticatePolarUser();
   } 
