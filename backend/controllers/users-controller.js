@@ -264,7 +264,7 @@ const getNewData = async(req, res, next) => {
   res.status(201); 
 }
 
-const getUserRouteTypes = async(req, res, next) => {
+const getUserRoutes = async(req, res, next) => {
   const userID = req.params.uid;
 
   let user;
@@ -287,7 +287,9 @@ const getUserRouteTypes = async(req, res, next) => {
     type = iterator.next().value;
   }
 
-  res.status(200).json({ list: routeTypeList });
+  
+
+  res.status(200).json({ types: routeTypeList, list: user.routes });
 }
 
 const filterExercise = async(uid, exercises, token) => {
@@ -452,4 +454,4 @@ exports.connectToPolarAPI = connectToPolarAPI;
 exports.getTestRoute = getTestRoute;
 
 exports.getNewData = getNewData;
-exports.getUserRouteTypes = getUserRouteTypes;
+exports.getUserRoutes = getUserRoutes;

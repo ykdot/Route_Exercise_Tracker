@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const usersRoutes = require('./routes/users-routes');
+const routesRoutes = require('./routes/routes-routes.js');
 const HttpError = require('./models/http-error');
 
 const app = express();
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 
 // middleware
 app.use('/api/users', usersRoutes);  // middleware
+app.use('/api/routes', routesRoutes);
 
 // cases when there is a request where there is no request before
 app.use((req, res, next) => {

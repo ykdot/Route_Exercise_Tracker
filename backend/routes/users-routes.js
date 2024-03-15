@@ -14,7 +14,7 @@ router.post('/connect-api', userController.connectToPolarAPI);
 router.get('/get-route', userController.getTestRoute);
 
 router.post('/dummy-data/', userController.getNewData);
-router.get('/get-route-type/:uid', userController.getUserRouteTypes);
+router.get('/get-user-routes/:uid', userController.getUserRoutes);
 
 
 module.exports = router;
