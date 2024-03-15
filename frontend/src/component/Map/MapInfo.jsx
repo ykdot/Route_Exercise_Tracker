@@ -5,7 +5,6 @@ import styles from './css/MapInfo.module.css';
 
 function MapInfo({routeTypes, routeList}) {
   const [routeType, setRouteType] = useState(routeTypes[0]);
-  console.log(routeType);
   return (
     <div className={styles.container}>
       <select onChange={e => setRouteType(e.target.value)}>

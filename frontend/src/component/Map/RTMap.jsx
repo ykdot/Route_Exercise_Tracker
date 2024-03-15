@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { MapContainer, FeatureGroup, Polyline, TileLayer } from "react-leaflet";
 import styles from './css/RTMap.module.css';
 
-// i will probably use routes later as I will utilize other data with routes, meaning I will have to fetch the data earlier
+// i will probably use routes later as I will utilize other data with routes, meaning I will have to fetch the data
+// center issue will be resolved 
 function RTMap({routes, routeType}) {
   const [routeData, setRouteData] = useState([]);
+  const [center, setCenter] = useState([37.67, -122.07]);
 
   useEffect(() => {
     try {
@@ -25,18 +27,22 @@ function RTMap({routes, routeType}) {
       throw new Error(err);
     }
   }, []);
-
   return (
-    <MapContainer className={styles['leaflet-container']} center={[37.67, -122.07]} zoom={13}>
-    <TileLayer 
-      attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
-    <FeatureGroup>
-    </FeatureGroup>
-    {routeData !== undefined && routeData.map(route => (
-      <Polyline key={route._id} positions={route.points} color="red"/>
-        ))}
-  </MapContainer>
+    <>
+    { routeData !== undefined &&    
+      <MapContainer className={styles['leaflet-container']} center={center} zoom={13}>
+        <TileLayer 
+          attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
+        <FeatureGroup>
+        </FeatureGroup>
+        {routeData.map(route => (
+          <Polyline key={route._id} positions={route.points} color="red"/>
+            ))}
+      </MapContainer>
+    }
+    </>
+
   );
 }
 
