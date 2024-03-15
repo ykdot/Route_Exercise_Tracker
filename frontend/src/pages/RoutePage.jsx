@@ -1,21 +1,40 @@
-import styles from './css/RoutePage.module.css';
-import 'leaflet/dist/leaflet.css';
-
-import { useState } from "react";
-import Map from '../component/Map/Map.jsx';
+import { useEffect, useState } from "react";
+import MapInfo from '../component/Map/MapInfo';
 
 function RoutePage() {
-  const [routeType, setRouteType] = useState('running');
+  const [routeTypes, setRouteTypes] = useState();
+  const [routeList, setRouteList] = useState();
+
+
+  // fetch route
+  useEffect(() => {
+    const uid = JSON.parse(localStorage.getItem('userData')).userID;
+    try {
+      const response = async () => {
+        const data = await fetch(`http://localhost:5000/api/users/get-user-routes/${uid}`, 
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        });
+
+        // proper user check needed later 
+        const responseData = await data.json();
+        setRouteTypes(responseData.types);
+        setRouteList(responseData.list);
+      }
+
+      response();
+    }catch(err) {
+      throw new Error(err);
+    }    
+  }, []);
 
   return (
-    <div className={styles.container}>
-      <select value={routeType} onChange={e => setRouteType(e.target.value)}>
-        <option value="walking">Walking</option>
-        <option value="running">Running</option>
-        <option value="driving">Driving</option>
-      </select> 
-      <Map />
-    </div>
+    <>
+      {routeTypes !== undefined && <MapInfo routeTypes={routeTypes} routeList={routeList}/>}
+    </>
   );
 }
 

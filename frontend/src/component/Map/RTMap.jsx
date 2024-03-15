@@ -1,25 +1,24 @@
 import { useEffect, useState } from "react";
 import { MapContainer, FeatureGroup, Polyline, TileLayer } from "react-leaflet";
-import styles from './Map.module.css';
+import styles from './css/RTMap.module.css';
 
-function Map() {
+// i will probably use routes later as I will utilize other data with routes, meaning I will have to fetch the data earlier
+function RTMap({routes, routeType}) {
   const [routeData, setRouteData] = useState([]);
-
 
   useEffect(() => {
     try {
       const response = async () => {
-        const data = await fetch(`http://localhost:5000/api/users/get-route`, 
+        const uid = JSON.parse(localStorage.getItem('userData')).userID;
+        const data = await fetch(`http://localhost:5000/api/routes/get-user-routes/${uid}/${routeType}`, 
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
           },  
         });
-
-        // proper user check needed later 
         const responseData = await data.json();
-        setRouteData(responseData.coordinates);
+        setRouteData(responseData.list);
       }
       response(); 
     }catch(err) {
@@ -33,10 +32,12 @@ function Map() {
       attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
     <FeatureGroup>
-      <Polyline positions={routeData} color="red"/>
     </FeatureGroup>
+    {routeData !== undefined && routeData.map(route => (
+      <Polyline key={route._id} positions={route.points} color="red"/>
+        ))}
   </MapContainer>
   );
 }
 
-export default Map;
+export default RTMap;
