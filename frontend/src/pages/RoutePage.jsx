@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import MapInfo from '../component/Map/MapInfo';
+import RouteInfo from "../component/Map/RouteInfo";
+import HeatMap from "../component/Map/HeatMap";
+
+import styles from './css/RoutePage.module.css';
 
 function RoutePage() {
   const [routeTypes, setRouteTypes] = useState();
@@ -32,9 +36,10 @@ function RoutePage() {
   }, []);
 
   return (
-    <>
-      {routeTypes !== undefined && <MapInfo routeTypes={routeTypes} routeList={routeList}/>}
-    </>
+    <div className={styles['map-info']}>
+      {routeTypes !== undefined && <MapInfo className={styles['container-right']} routeTypes={routeTypes} routeList={routeList}/>}
+      {routeTypes !== undefined && <RouteInfo className={styles['container-right']}/>}
+    </div>
   );
 }
 

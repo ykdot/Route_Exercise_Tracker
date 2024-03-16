@@ -3,7 +3,7 @@ import uuid from 'react-uuid';
 import RTMap from "./RTMap";
 import styles from './css/MapInfo.module.css';
 
-function MapInfo({routeTypes, routeList}) {
+function MapInfo({className, routeTypes, routeList}) {
   const [routeType, setRouteType] = useState(routeTypes[0]);
   return (
     <div className={styles.container}>

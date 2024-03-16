@@ -1,8 +1,12 @@
-.container {
+.map-info {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 10rem;
+  flex-direction: row;
 }
 
+.container-left {
+  width: 80%;
+}
+
+.container-right {
+  width: 20%;
+}

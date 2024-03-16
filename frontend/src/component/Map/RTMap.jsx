@@ -42,7 +42,6 @@ function RTMap({routes, routeType}) {
       </MapContainer>
     }
     </>
-
   );
 }
 

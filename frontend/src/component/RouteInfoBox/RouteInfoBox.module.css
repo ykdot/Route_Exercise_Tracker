@@ -1,0 +1,11 @@
+.button-container {
+  width: 100%;
+}
+
+.container {
+  background-color: lightgreen;
+}
+
+.hidden {
+  display: none;
+}
