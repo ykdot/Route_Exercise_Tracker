@@ -5,28 +5,28 @@ import styles from './css/RTMap.module.css';
 // i will probably use routes later as I will utilize other data with routes, meaning I will have to fetch the data
 // center issue will be resolved 
 function RTMap({routes, routeType}) {
-  const [routeData, setRouteData] = useState([]);
-  const [center, setCenter] = useState([37.67, -122.07]);
+  const [routeData, setRouteData] = useState(routes);
+  const [center, setCenter] = useState(routes[0].points[0]);
 
-  useEffect(() => {
-    try {
-      const response = async () => {
-        const uid = JSON.parse(localStorage.getItem('userData')).userID;
-        const data = await fetch(`http://localhost:5000/api/routes/get-user-routes/${uid}/${routeType}`, 
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          },  
-        });
-        const responseData = await data.json();
-        setRouteData(responseData.list);
-      }
-      response(); 
-    }catch(err) {
-      throw new Error(err);
-    }
-  }, []);
+  // useEffect(() => {
+  //   try {
+  //     const response = async () => {
+  //       const uid = JSON.parse(localStorage.getItem('userData')).userID;
+  //       const data = await fetch(`http://localhost:5000/api/routes/get-user-routes/${uid}/${routeType}`, 
+  //       {
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         },  
+  //       });
+  //       const responseData = await data.json();
+  //       setRouteData(responseData.list);
+  //     }
+  //     response(); 
+  //   }catch(err) {
+  //     throw new Error(err);
+  //   }
+  // }, []);
   return (
     <>
     { routeData !== undefined &&    

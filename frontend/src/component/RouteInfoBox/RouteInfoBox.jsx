@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './RouteInfoBox.module.css';
 
-function RouteInfoBox({route}) {
+function RouteInfoBox({data}) {
   const [detailStatus, setDetailStatus] = useState(false);
 
   let detailBox;
@@ -18,17 +18,17 @@ function RouteInfoBox({route}) {
   return (
     <>
       <button className={styles['button-container']} onClick={() => setDetailStatus(!detailStatus)}>
-        <p>Running</p>
-        <p>4/16</p>
-        <p>18:06</p>
+        <p>{data.type}</p>
+        <p>{data.date}</p>
+        <p>{data.date}</p>
       </button>
       <div className={styles[detailBox]}>
-        <p>Type: </p>
-        <p>Distance: {"10KM"}</p>
-        <p>Time: {"18:00"}</p>
-        <p>Duration: {}</p>
+        <p>Type: {data.type}</p>
+        <p>Distance: {data.other.distance} Meters</p>
+        <p>Time: {data.date}</p>
+        <p>Duration: {data.other.duration}</p>
         <p>Heartbeat Data: </p>
-        <p>Calories: </p>
+        <p>Calories: {data.other.calories}</p>
         <p>Delete</p>
       </div>    
     </>

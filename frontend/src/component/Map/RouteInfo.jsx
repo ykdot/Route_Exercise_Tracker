@@ -1,28 +1,14 @@
 import RouteInfoBox from '../RouteInfoBox/RouteInfoBox';
+import uuid from 'react-uuid';
 
 import styles from './css/RouteInfo.module.css';
 
-function RouteInfo() {
+function RouteInfo({data}) {
   return (
     <div className={styles.container}>
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
-      <RouteInfoBox />
+        {data.map(data => (
+          <RouteInfoBox key={uuid()} data={data}/>
+            ))}      
     </div>
   );
 }
