@@ -138,6 +138,7 @@ const createUser = async(req, res, next) => {
   });
 }
 
+// check to see if polar ID matches
 const connectToPolarAPI = async(req, res, next) => {
   // code === authentication code from Polar
   const code = req.body.code;
@@ -170,10 +171,33 @@ const connectToPolarAPI = async(req, res, next) => {
     throw new Error(err);
   }
   console.log(accessToken);
+
+  // check to see if account is affiliated with account
+
+
+  // get user information
   try {
     let userAuthorization = 'Bearer ' + accessToken;
-    const apiID = process.env.USER_API_ID;
-    const data = await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}`, 
+
+    // const data = await fetch(`https://www.polaraccesslink.com/v3/users`, 
+    // {
+    //   method: 'POST',
+    //   headers: {
+    //     'Authorization': userAuthorization,
+    //     'Content-Type': 'application/json',
+    //     'Accept': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     "member-id": "User_id_999"
+    //   }) 
+    // }); 
+    // const responseData = await data.json();
+
+    // const apiID = responseData['polar-user-id'];
+    const apiID = 59133268;
+
+    // console.log(responseData);
+    const data2 = await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}`, 
     {
       method: 'GET',
       headers: {
@@ -183,8 +207,8 @@ const connectToPolarAPI = async(req, res, next) => {
     }); 
 
     // proper user check needed later 
-    const responseData = await data.json();
-    console.log(responseData);  
+    const responseData2 = await data2.json();
+    console.log(responseData2);  
   }catch(err) {
     throw new Error(err);
   } 
@@ -192,19 +216,6 @@ const connectToPolarAPI = async(req, res, next) => {
   res.status(201).json({ token: accessToken });
 }
 
-const getTestRoute = async(req, res, next) => {
-  const gpx = new DOMParser().parseFromString(fs.readFileSync('./test.GPX', 'utf8'));
-  const converted = tj.gpx(gpx);
-
-  const coord = converted.features[0].geometry.coordinates;
-
-  for (let i = 0; i < coord.length; i++) {
-    coord[i].pop();
-    [coord[i][0], coord[i][1]] = [coord[i][1], coord[i][0]];
-  }
-  
-  res.status(200).json({coordinates: coord })
-}
 // transaction shelf life is 10 minutes; potentially no other transaction being able to be created in that timeframe
 const getNewData = async(req, res, next) => {
   const token = req.body.token;
@@ -374,6 +385,7 @@ const getRoute = async(file) => {
 }
 
 const createRoute = async(uid, route, coord) => {
+  
 
   // check if user exists
   let user;
@@ -451,7 +463,5 @@ const createRoute = async(uid, route, coord) => {
 exports.login = login;
 exports.createUser = createUser;
 exports.connectToPolarAPI = connectToPolarAPI;
-exports.getTestRoute = getTestRoute;
-
 exports.getNewData = getNewData;
 exports.getUserRoutes = getUserRoutes;

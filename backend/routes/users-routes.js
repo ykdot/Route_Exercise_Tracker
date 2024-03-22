@@ -11,7 +11,6 @@ router.get('/');
 router.post('/login', userController.login);
 router.post('/create', userController.createUser);
 router.post('/connect-api', userController.connectToPolarAPI);
-router.get('/get-route', userController.getTestRoute);
 
 router.post('/dummy-data/', userController.getNewData);
 router.get('/get-user-routes/:uid', userController.getUserRoutes);

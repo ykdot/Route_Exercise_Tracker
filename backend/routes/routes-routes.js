@@ -10,6 +10,7 @@ router.get('/');
 // authentication
 
 router.get('/get-user-routes/:uid/:routeType', routeController.getRoutePoints);
+router.delete('/delete-route/:rid', routeController.deleteRoute);
 
 
 module.exports = router;
