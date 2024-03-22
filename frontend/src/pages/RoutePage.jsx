@@ -74,7 +74,7 @@ function RoutePage() {
     }    
   }, []);
 
-  console.log(routeType);
+  console.log(routeData);
   return (
     <div className={styles['map-info']}>
       {routeTypes !== undefined &&
