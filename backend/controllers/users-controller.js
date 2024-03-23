@@ -8,7 +8,6 @@ const mongoose = require('mongoose');
 
 const User = require('../models/user.js');
 const Route = require('../models/route.js');
-const RouteType = require('../models/routeType.js');
 const HttpError = require('../models/http-error.js');
 const basic_auth = process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET;
 
@@ -142,6 +141,7 @@ const createUser = async(req, res, next) => {
 const connectToPolarAPI = async(req, res, next) => {
   // code === authentication code from Polar
   const code = req.body.code;
+  const uid = req.body.uid;
   
   const api_auth = 'Basic ' + btoa(basic_auth);
   const api_data = new URLSearchParams({
@@ -151,6 +151,7 @@ const connectToPolarAPI = async(req, res, next) => {
   }) ;
 
   let accessToken;
+  let apiID;
   try {
     const data = await fetch(`https://polarremote.com/v2/oauth2/token`, 
     {
@@ -179,22 +180,49 @@ const connectToPolarAPI = async(req, res, next) => {
   try {
     let userAuthorization = 'Bearer ' + accessToken;
 
-    // const data = await fetch(`https://www.polaraccesslink.com/v3/users`, 
-    // {
-    //   method: 'POST',
-    //   headers: {
-    //     'Authorization': userAuthorization,
-    //     'Content-Type': 'application/json',
-    //     'Accept': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     "member-id": "User_id_999"
-    //   }) 
-    // }); 
-    // const responseData = await data.json();
+    let user;
+    try {
+      user = await User.findById(uid);
+    }catch(err) {
+      throw new Error(err);
+    }
+    if (!user) {
+      throw new HttpError('User does not exist', 404);
+    }
+    console.log("user polar id is " + user.polarID);
 
-    // const apiID = responseData['polar-user-id'];
-    const apiID = 59133268;
+    if (user.polarID === 0) {
+      const data = await fetch(`https://www.polaraccesslink.com/v3/users`, 
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': userAuthorization,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          "member-id": uid
+        }) 
+      }); 
+      const responseData = await data.json();
+      console.log(responseData);
+
+      apiID = responseData['polar-user-id'];      
+      try {
+        const sess = await mongoose.startSession();
+        sess.startTransaction();
+        user.polarID = apiID;
+        await user.save({ session: sess });
+        await sess.commitTransaction();
+      }catch(err) {
+        throw new HttpError(err, 500);
+      }
+    }
+    else {
+      apiID = user.polarID;
+    }
+
+    console.log(apiID);
 
     // console.log(responseData);
     const data2 = await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}`, 
@@ -213,7 +241,7 @@ const connectToPolarAPI = async(req, res, next) => {
     throw new Error(err);
   } 
  
-  res.status(201).json({ token: accessToken });
+  res.status(201).json({ apiID: apiID, token: accessToken });
 }
 
 // transaction shelf life is 10 minutes; potentially no other transaction being able to be created in that timeframe
@@ -223,14 +251,24 @@ const getNewData = async(req, res, next) => {
   // i might have to include sending the polar id, other user information later
   // const api_auth = 'Basic ' + btoa(basic_auth);
   const userAuthorization = 'Bearer ' + token;
-  
+  let user;
+  try {
+    user = await User.findById(uid);
+  }catch(err) {
+    throw new HttpError('Server Error', 500);
+  }
+
+  if (!user) {
+    throw new HttpError("User does not exist", 404);
+  }
+  const apiID = user.polarID;
 
   // console.log(token);
   let transactionID;
   let list;
   try {
     // apiID should not be hard coded later
-    const apiID = process.env.USER_API_ID;
+    
     console.log(apiID);
     console.log(token);
 
@@ -413,22 +451,6 @@ const createRoute = async(uid, route, coord) => {
     user.routes.set(route['detailed-sport-info'], []);
   }
 
-  // routeType work
-  let routeType;
-  try {
-    routeType = await RouteType.findOne({type: route['detailed-sport-info']}).exec();
-  } catch(err) {
-    return new HttpError('request error for routeType', 404);
-  }  
-
-  // make new RouteType if route type for current route does not exist
-  if (!routeType) {
-    routeType = new RouteType({
-      type: route['detailed-sport-info'],
-      routes: []
-    });
-  }
-
   try {
     // transaction and sessions
     // makes sure everything is good before putting both in the database
@@ -440,9 +462,6 @@ const createRoute = async(uid, route, coord) => {
 
     user.routes.get(route['detailed-sport-info']).push(createdRoute._id);
     await user.save({ session: sess });
-  
-    routeType.routes.push(createdRoute);
-    await routeType.save({ session: sess });
 
     await sess.commitTransaction();
   } catch (err) {
@@ -458,6 +477,70 @@ const createRoute = async(uid, route, coord) => {
   return new HttpError('Success', 201);
 }
 
+const deleteAccount = async(req, res, next) => {
+  const uid = req.params.uid;
+  const apiID = req.params.apiID;
+  const userAuthorization = 'Bearer ' + req.params.token;
+
+
+  let user;
+  let routes;
+  try {
+    user = await User.findById(uid);
+    routes = await Route.find({user: uid});
+
+  }catch(err) {
+    throw new HttpError('Server error', 500);
+  }
+
+  if (!user) {
+    throw new HttpError('user does not exist', 401);
+  }
+
+  // delink polar account
+  try {
+    const response = async() => 
+    await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': userAuthorization
+      },
+    });
+
+
+    await response();
+
+  }catch(err) {
+    throw new HttpError(err, 500);
+  }
+
+  // delete routes from routes
+  // delete routes from routeType
+  // delete user from db
+
+
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+
+    // delete routes from routes
+    const len = routes.length;
+    for (let i = 0; i < len; i++) {
+      await routes[i].deleteOne({session:sess});
+    }
+
+    await user.deleteOne({ session: sess});
+
+
+    await sess.commitTransaction();
+  }catch(err) {
+    throw new HttpError('Server error', 500);   
+  }
+
+  res.status(202).json({ message: "Successfully deleted account" });
+}
+
 
 
 exports.login = login;
@@ -465,3 +548,4 @@ exports.createUser = createUser;
 exports.connectToPolarAPI = connectToPolarAPI;
 exports.getNewData = getNewData;
 exports.getUserRoutes = getUserRoutes;
+exports.deleteAccount = deleteAccount;

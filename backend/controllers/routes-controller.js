@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const User = require('../models/user.js');
 const Route = require('../models/route.js');
-const RouteType = require('../models/routeType.js');
 const HttpError = require('../models/http-error.js');
 
 
@@ -42,11 +41,9 @@ const deleteRoute = async(req, res, next) => {
 
   console.log()
   let route;
-  let routeType;
   let user;
   try {
     route = await Route.findById(rid);
-    routeType = await RouteType.findOne({ type: route.type });
     user = await User.findById(route.user);
   }catch(err) {
     throw new HttpError('Server error', 500);
@@ -63,9 +60,7 @@ const deleteRoute = async(req, res, next) => {
   let temp = user.routes.get(route.type);
   console.log(temp);
   temp.pull(rid);
-  console.log(temp);
 
-  console.log(2);
 
   try {
     const sess = await mongoose.startSession();
@@ -78,11 +73,6 @@ const deleteRoute = async(req, res, next) => {
     }
 
     await user.save({ session: sess });
-    console.log(11);
-
-    
-    routeType.routes.pull(route);
-    await routeType.save({ session: sess });
 
     await sess.commitTransaction();
   } catch(err) {
