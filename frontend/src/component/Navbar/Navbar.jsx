@@ -27,7 +27,7 @@ function Navbar() {
         <Link to='/route' className={classes['link-button']}>Routes</Link>
         {!auth.isLoggedIn && <Link to='/login' className={classes['link-button']}>Log In</Link>}
         {auth.isLoggedIn && <button className={classes['link-button']} onClick={auth.logout}>Log Out</button>}
-        {auth.isLoggedIn && <Link className={classes['link-button']}>{auth.username}</Link>}
+        {auth.isLoggedIn && <Link to={`/user/${auth.username}`} className={classes['link-button']}>{auth.username}</Link>}
       </nav>
     </nav>
   );

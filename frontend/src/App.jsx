@@ -6,6 +6,7 @@ import AuthenticationPage from './pages/AuthenticationPage.jsx';
 import RouteTrackerContext from "./store/route-tracker-contex.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import RoutePage from "./pages/RoutePage.jsx";
+import UserPage from "./pages/UserPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,8 @@ const router = createBrowserRouter([
       { path: '/', element: <HomePage />},
       { path: '/login', element: <AuthenticationPage version={'login'}/>},
       { path: '/signup', element: <AuthenticationPage version={'signup'}/>},
-      { path: '/route', element: <RoutePage />}
+      { path: '/route', element: <RoutePage />},
+      { path: '/user/:user', element: <UserPage />},
 
     ],
   },

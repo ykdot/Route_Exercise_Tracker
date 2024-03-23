@@ -21,7 +21,8 @@ function HomePage() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          code: code
+          code: code,
+          uid: JSON.parse(localStorage.getItem('userData')).userID
         })  
       }); 
 
@@ -30,7 +31,7 @@ function HomePage() {
       console.log(responseData); 
       localStorage.setItem(
         'apiToken', 
-        JSON.stringify({ token: responseData.token }));
+        JSON.stringify({ apiID: responseData.apiID, token: responseData.token }));
       
     }catch(err) {
       throw new Error(err);
