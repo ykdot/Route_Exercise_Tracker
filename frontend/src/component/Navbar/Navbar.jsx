@@ -7,8 +7,6 @@ function Navbar() {
   const auth = useContext(RouteTrackerContext);
   const [ mobileList, setMobileList ] = useState(false);
 
-
-
   let mobileShow;
   // show list or not for mobile version
   if (mobileList) {
@@ -24,7 +22,9 @@ function Navbar() {
       </button>
       <nav className={`${classes['link-nav']} ${classes[mobileShow]}`}>
         <Link className={classes['link-button']}>Home</Link>
-        <Link to='/route' className={classes['link-button']}>Routes</Link>
+        {!auth.isLoggedIn && <Link to='/demo' className={classes['link-button']}>Demo</Link>}
+        {!auth.isLoggedIn && <Link to='/about' className={classes['link-button']}>About</Link>}
+        {auth.isLoggedIn && <Link to='/route' className={classes['link-button']}>Routes</Link>}
         {!auth.isLoggedIn && <Link to='/login' className={classes['link-button']}>Log In</Link>}
         {auth.isLoggedIn && <button className={classes['link-button']} onClick={auth.logout}>Log Out</button>}
         {auth.isLoggedIn && <Link to={`/user/${auth.username}`} className={classes['link-button']}>{auth.username}</Link>}

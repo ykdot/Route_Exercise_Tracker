@@ -5,6 +5,8 @@ import Layout from './pages/Layout.jsx';
 import AuthenticationPage from './pages/AuthenticationPage.jsx';
 import RouteTrackerContext from "./store/route-tracker-contex.jsx";
 import HomePage from "./pages/HomePage.jsx";
+import AboutPage from './pages/AboutPage.jsx';
+import DemoPage from './pages/DemoPage.jsx';
 import RoutePage from "./pages/RoutePage.jsx";
 import UserPage from "./pages/UserPage.jsx";
 
@@ -14,6 +16,9 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: '/', element: <HomePage />},
+      { path: '/about', element: <AboutPage />},
+      { path: '/demo', element: <DemoPage />},
+
       { path: '/login', element: <AuthenticationPage version={'login'}/>},
       { path: '/signup', element: <AuthenticationPage version={'signup'}/>},
       { path: '/route', element: <RoutePage />},
@@ -32,7 +37,7 @@ function App() {
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
   const [apiToken, setApiToken] = useState(false);
-  const [apiStatus, setApiStatus] = useState(false);
+  const [isPolarAuthenticated, setIsPolarAuthenticated] = useState(false);
 
 
   const login = useCallback((uid, username, token, expirationDate ) => {
@@ -53,17 +58,21 @@ function App() {
     setUserID(null);
     setUsername(null);
     setTokenExpirationDate(null);
-    localStorage.removeItem('userData');
+    setApiToken(null);
+    setIsPolarAuthenticated(false);
+    // localStorage.removeItem('userData');
+    // all local storage clear; too generaltho
+    localStorage.clear();
     window.location.reload(); 
   }, []);
 
-  // const apiLogin = useCallback((api) => {
-  //   setApiToken(api);
-  //   setApiStatus(true);
-  //   localStorage.setItem(
-  //     'apiData', 
-  //     JSON.stringify({ api: apiToken, status: apiStatus }));
-  // }, []);
+  const apiLogin = useCallback((token, apiID) => {
+    setApiToken(token);
+    setIsPolarAuthenticated(true);
+    localStorage.setItem(
+      'apiToken', 
+      JSON.stringify({ apiID: apiID, token: token }));
+  }, []);
 
   useEffect(() => {
     if (token && tokenExpirationDate) {
@@ -92,8 +101,9 @@ function App() {
         userID: userID,
         login: login,
         logout: logout,
-        // apiStatus: apiStatus,
-        // apiLogin: apiLogin          
+        apiToken: apiToken,
+        isPolarAuthenticated: isPolarAuthenticated,
+        apiLogin: apiLogin     
       }}>
       <RouterProvider router={router}/>
     </RouteTrackerContext.Provider>

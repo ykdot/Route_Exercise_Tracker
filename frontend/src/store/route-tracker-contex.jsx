@@ -8,10 +8,9 @@ const RouteTrackerContext = createContext({
   token: null,
   login: () => {},
   logout: () => {},
-
-  
   apiLogin: () => {},
-  apiStatus: false
+  isPolarAuthenticated: false,
+  apiToken: null
 });
 
 export default RouteTrackerContext;

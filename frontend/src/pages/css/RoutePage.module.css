@@ -16,6 +16,26 @@
   width: 70vw;
 }
 
+.container-header {
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.container-select {
+  padding-left: 1rem;
+  width: 60vw;
+  background-color: white;
+  border: 0;
+}
+
+.container-buttons {
+  width: 40vw;
+  border-radius: 0;
+  border: 1px;
+}
+
 .container-right {
   width: 20%;
 }

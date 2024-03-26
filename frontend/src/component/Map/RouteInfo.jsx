@@ -6,7 +6,7 @@ import styles from './css/RouteInfo.module.css';
 function RouteInfo({data}) {
   return (
     <div className={styles.container}>
-        {data.map(data => (
+        {data !== undefined && data.map(data => (
           <RouteInfoBox key={uuid()} data={data}/>
             ))}      
     </div>

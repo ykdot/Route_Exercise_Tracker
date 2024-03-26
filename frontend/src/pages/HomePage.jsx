@@ -29,9 +29,10 @@ function HomePage() {
       // proper user check needed later 
       const responseData = await data.json();
       console.log(responseData); 
-      localStorage.setItem(
-        'apiToken', 
-        JSON.stringify({ apiID: responseData.apiID, token: responseData.token }));
+      auth.apiLogin(responseData.token, responseData.apiID);
+      // localStorage.setItem(
+      //   'apiToken', 
+      //   JSON.stringify({ apiID: responseData.apiID, token: responseData.token }));
       
     }catch(err) {
       throw new Error(err);
@@ -40,7 +41,7 @@ function HomePage() {
 
   const getData = async() => {
     try {
-      const data = await fetch(`http://localhost:5000/api/users/dummy-data`, 
+      const data = await fetch(`http://localhost:5000/api/users/get-new-data`, 
       {
         method: 'POST',
         headers: {
@@ -54,10 +55,7 @@ function HomePage() {
 
       // proper user check needed later 
       const responseData = await data.json();
-      console.log(responseData);   
-      localStorage.setItem(
-        'apiNewData', 
-        JSON.stringify({ transID: responseData.trans, list: responseData.exercise }));   
+      console.log(responseData);
     }catch(err) {
       throw new Error(err);
     }
