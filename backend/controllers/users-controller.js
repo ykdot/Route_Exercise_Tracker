@@ -341,35 +341,35 @@ const getUserRoutes = async(req, res, next) => {
   res.status(200).json({ types: routeTypeList, list: user.routes });
 }
 
-// const getAllUserRoutes = async(req, res, next) => {
-//   const userID = req.params.uid;
+const getAllUserRoutes = async(req, res, next) => {
+  const userID = req.params.uid;
 
-//   let user;
-//   try {
-//     user = await User.findById(userID);
-//   }catch(err) {
-//     throw new HttpError('Server error', 500);
-//   }
+  let user;
+  try {
+    user = await User.findById(userID);
+  }catch(err) {
+    throw new HttpError('Server error', 500);
+  }
 
-//   if (!user) {
-//     throw new HttpError('Server error', 401);
-//   }
+  if (!user) {
+    throw new HttpError('Server error', 401);
+  }
 
-//   let keys = [];
-//   const iterator = user.routes.keys();
+  let keys = [];
+  const iterator = user.routes.keys();
 
-//   let type = iterator.next().value;
-//   while (type !== undefined) {
-//     keys.push(type);
-//     type = iterator.next().value;
-//   }
+  let type = iterator.next().value;
+  while (type !== undefined) {
+    keys.push(type);
+    type = iterator.next().value;
+  }
 
 
 
   
 
-//   res.status(200).json({ keys: keys, values: user.routes });
-// }
+  res.status(200).json({ keys: keys, values: user.routes });
+}
 
 const filterExercise = async(uid, exercises, token) => {
   let userAuthorization = 'Bearer ' + token;
@@ -580,4 +580,4 @@ exports.getNewData = getNewData;
 exports.getUserRoutes = getUserRoutes;
 exports.deleteAccount = deleteAccount;
 
-// exports.getAllUserRoutes = getAllUserRoutes;
+exports.getAllUserRoutes = getAllUserRoutes;

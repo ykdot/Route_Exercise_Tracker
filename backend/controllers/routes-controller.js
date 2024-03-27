@@ -35,6 +35,20 @@ const getRoutePoints = async(req, res, next) => {
   res.status(200).json({ list: routeList });
 }
 
+const getRoute = async(req, res) => {
+  const rid = req.params.rid;
+
+  let route;
+
+  try {
+    route = await Route.findById(rid);
+  }catch(err) {
+    throw new HttpError("Server error", 500);
+  }
+
+  res.json({route: route});
+}
+
 const deleteRoute = async(req, res, next) => {
   const uid = req.params.uid;
   const rid = req.params.rid;  
@@ -86,3 +100,5 @@ const deleteRoute = async(req, res, next) => {
 
 exports.getRoutePoints = getRoutePoints;
 exports.deleteRoute = deleteRoute;
+
+exports.getRoute = getRoute;

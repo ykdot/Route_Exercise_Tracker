@@ -12,5 +12,6 @@ router.get('/');
 router.get('/get-user-routes/:uid/:routeType', routeController.getRoutePoints);
 router.delete('/delete-route/:rid', routeController.deleteRoute);
 
+router.get('/get-route/:rid', routeController.getRoute);
 
 module.exports = router;
