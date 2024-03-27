@@ -1,0 +1,139 @@
+.info-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.first-section {
+  display: flex;
+  flex-direction: row;
+  background-color: #fef4ea;
+  justify-content: space-between;
+  padding: 0 2rem 0 2rem;
+}
+
+.first-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.first-right {
+}
+
+.first-desc {
+  width: 30rem;
+}
+
+.first-link {
+  padding: 1rem;
+  border-radius: 2rem;
+  text-decoration: none;
+  color: white;
+  background-color: black;
+}
+
+.second-section {
+  padding-top: 2rem;
+}
+
+.second-benefit-section {
+  display: flex;
+  flex-direction: row;
+  padding: 0 4rem 0 4rem;
+  justify-content: space-between;
+}
+
+.second-info-box {
+  width: 15rem;
+}
+
+.second-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 4rem;
+}
+
+.second-head-text {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.second-desc-text {
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+@media (max-width: 1200px) {
+  .first-section {
+    padding: 0 1rem 0 1rem;
+  }
+
+  .second-info-box {
+    width: 15rem;
+  }
+  
+  .second-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 3.5rem;
+  }
+  
+  .second-head-text {
+    text-align: center;
+    font-size: 1.7rem;
+  }
+  
+  .second-desc-text {
+    text-align: center;
+    font-size: 1rem;
+  }
+
+}
+
+@media (max-width: 600px) {
+  .first-section {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .first-left {
+    background-image: url('../../../public/title-map.png');
+    background-repeat: no-repeat;
+    background-color: contain;
+    height: 500px;
+  }
+
+  .first-right {
+    display: none;
+  }
+
+  .second-benefit-section {
+    display: flex;
+    flex-direction: column;
+    padding: 0 4rem 0 4rem;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .second-info-box {
+  }
+
+  .second-img {
+    height: 3rem;
+  }
+  
+  .second-head-text {
+    font-size: 1.5rem;
+  }
+  
+  .second-desc-text {
+    font-size: 1rem;
+  }
+
+}

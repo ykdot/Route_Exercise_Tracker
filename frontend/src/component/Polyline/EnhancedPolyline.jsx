@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Polyline } from "react-leaflet";
+import { Polyline, Popup } from "react-leaflet";
 
 function EnhancedPolyline({positions, color}) {
   const [isSelected, setSelectedStatus] = useState(false);
@@ -20,7 +20,8 @@ function EnhancedPolyline({positions, color}) {
               click: () => {
                 setSelectedStatus(!isSelected);
               },
-            }}/>
+            }}>
+      </Polyline>
     </>
   );
 }

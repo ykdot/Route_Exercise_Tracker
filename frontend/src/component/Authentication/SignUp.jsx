@@ -72,7 +72,7 @@ function SignUp() {
 
   return (
     <form onSubmit={handleSubmit} className={styles['auth-box']}>
-      <h1 className={styles.title}>Login</h1>
+      <h1 className={styles.title}>Sign Up</h1>
       {error != '' && <p className={styles['error-message']}>{error}</p>}
       <label className={styles['label-title']} htmlFor="">Email</label>
       <input className={styles['input-title']} value={enteredNewUser.email} onChange={handleChangeEmail} type='email' placeholder='Email'/> 

@@ -28,7 +28,7 @@
   margin-left: 2rem;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   .title {
     display: inline-block;
   }
