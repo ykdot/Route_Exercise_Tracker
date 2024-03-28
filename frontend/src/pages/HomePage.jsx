@@ -112,6 +112,16 @@ function HomePage() {
             </ul>
           </li>
         </div>
+        <div className={styles['third-section']}>
+          <h4>Use your Polar Account</h4>
+          <p>You can transfer all routes recorded by Polar to Route Tracker. In addition to the routes transfered, other data such as calories and route distance would automatically be shown.</p>
+        </div>
+
+        <div className={styles.footer}>
+          <p>Email</p>
+          <p>Github</p>
+          <p>Polar Flow</p>
+        </div>
       </div>
       }
     </>

@@ -7,8 +7,9 @@
 .first-section {
   display: flex;
   flex-direction: row;
+  text-align: center;
   background-color: #fef4ea;
-  justify-content: space-between;
+  justify-content: space-evenly;
   padding: 0 2rem 0 2rem;
 }
 
@@ -18,13 +19,15 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  width: 30rem;
+  font-size: 1.3rem;
 }
 
 .first-right {
 }
 
 .first-desc {
-  width: 30rem;
+  /* width: 30rem; */
 }
 
 .first-link {
@@ -36,7 +39,7 @@
 }
 
 .second-section {
-  padding-top: 2rem;
+  padding: 4rem 0 4rem 0 ;
 }
 
 .second-benefit-section {
@@ -67,9 +70,42 @@
   font-size: 1.3rem;
 }
 
+.third-section {
+  background-color: #fef4ea;
+  height: 20rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  width: calc(100vw - 1rem);
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  gap: 1rem;
+  height: 10rem;
+  width: calc(100vw - 1rem);
+  background-color: navy;
+  color: white;
+  text-align: center;
+}
+
 @media (max-width: 1200px) {
   .first-section {
     padding: 0 1rem 0 1rem;
+  }
+
+  .first-left {
+    width: 30rem;
+  }
+
+  .first-right {
+    width: 30rem;
   }
 
   .second-info-box {
@@ -95,17 +131,36 @@
 
 }
 
+@media (max-width: 1000px) {
+
+  .first-section {
+    padding: 1rem 2rem 1rem 2rem;
+  }
+
+  .first-left {
+    width: 20rem;
+    font-size: 1.1rem;
+  }
+
+  .first-right {
+    width: 20rem;
+  }
+}
+
+
 @media (max-width: 600px) {
   .first-section {
     justify-content: center;
     align-items: center;
+    padding: 1rem 1rem 1rem 1rem;
   }
 
   .first-left {
     background-image: url('../../../public/title-map.png');
     background-repeat: no-repeat;
     background-color: contain;
-    height: 500px;
+    height: 28rem;
+    width: 90vw;
   }
 
   .first-right {
