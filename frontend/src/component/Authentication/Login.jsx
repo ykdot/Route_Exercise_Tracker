@@ -36,7 +36,7 @@ function Login() {
       if (!response.ok) {
         throw new Error(responseData.message);
       }
-      auth.login(responseData.userID, responseData.username, responseData.token); 
+      auth.login(responseData.userID, responseData.username, responseData.email, responseData.token); 
 
       navigate('/');
       // if (location.state?.from) {

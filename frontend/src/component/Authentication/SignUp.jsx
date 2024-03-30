@@ -36,7 +36,7 @@ function SignUp() {
       if (!response.ok) {
         throw new Error(responseData.message);
       }
-      auth.login(responseData.userID, responseData.username, responseData.token);
+      auth.login(responseData.userID, responseData.username, responseData.email, responseData.token);
       navigate('/');
       // window.location.reload(); 
     } catch(err) {

@@ -38,36 +38,37 @@ function App() {
   const [token, setToken] = useState(false);
   const [userID, setUserID] = useState(false);
   const [username, setUsername ] = useState(false);
+  const [email, setEmail] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
   const [apiToken, setApiToken] = useState(false);
   const [isPolarAuthenticated, setIsPolarAuthenticated] = useState(false);
 
 
-  const login = useCallback((uid, username, token, expirationDate ) => {
-    auth.user = uid;
+  const login = useCallback((uid, username, email, token, expirationDate ) => {
     setToken(token);
     setUsername(username);
+    setEmail(email);
     setUserID(uid);
     const tokenClock = expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
     setTokenExpirationDate(tokenClock);
     localStorage.setItem(
       'userData', 
-      JSON.stringify({ userID: uid, username: username, token: token, expiration: tokenClock.toISOString() }));
+      JSON.stringify({ userID: uid, username: username, email: email, token: token, expiration: tokenClock.toISOString() }));
   }, []);
 
   const logout = useCallback(() => {
-    auth.user = {};
     setToken(null);
     setUserID(null);
     setUsername(null);
+    setEmail(null);
     setTokenExpirationDate(null);
     setApiToken(null);
     setIsPolarAuthenticated(false);
     // localStorage.removeItem('userData');
     // all local storage clear; too generaltho
     localStorage.clear();
-    window.location.reload(); 
+    // window.location.reload(); 
   }, []);
 
   const apiLogin = useCallback((token, apiID) => {
@@ -92,16 +93,16 @@ function App() {
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem('userData'));
     if (storedData && storedData.token && new Date(storedData.expiration) > new Date()) {
-      login(storedData.userID, storedData.username, storedData.token, new Date(storedData.expiration));
+      login(storedData.userID, storedData.username, storedData.email, storedData.token, new Date(storedData.expiration));
     }
   }, [login]); 
   return (
     <RouteTrackerContext.Provider
       value = {{
-        user: auth.user,
         isLoggedIn: !!token,
         token: token,
         username: username,
+        email: email,
         userID: userID,
         login: login,
         logout: logout,
