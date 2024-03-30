@@ -53,6 +53,7 @@ const login = async(req, res, next) => {
   res.json({
     userID: recognizedUser.id,
     username: recognizedUser.username,
+    email: recognizedUser.email,
     token: token
   })
 }
@@ -133,6 +134,7 @@ const createUser = async(req, res, next) => {
   res.status(201).json({  
     userID: newUser.id,
     username: newUser.username,
+    email: newUser.email,
     token: token
   });
 }
