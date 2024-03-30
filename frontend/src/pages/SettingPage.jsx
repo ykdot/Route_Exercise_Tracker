@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 import RouteTrackerContext from '../store/route-tracker-contex';
 import styles from './css/SettingPage.module.css';
-import { redirect } from 'react-router-dom';
 
 function SettingPage() {
   const auth = useContext(RouteTrackerContext);
@@ -12,7 +11,7 @@ function SettingPage() {
   
 
   const handleDeleteAccount = async() => {
-    // prompt to ask user
+    // prompt to ask user; model implementation in future
 
     const userID = JSON.parse(localStorage.getItem('userData')).userID;
     const apiID = JSON.parse(localStorage.getItem('apiToken')).apiID;

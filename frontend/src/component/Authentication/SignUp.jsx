@@ -73,7 +73,7 @@ function SignUp() {
   }   
 
   return (
-    <form onSubmit={handleSubmit} className={styles['auth-box']}>
+    <form onSubmit={handleSubmit} className={styles['auth-box-signup']}>
       <h1 className={styles.title}>Sign Up</h1>
       {error != '' && <p className={styles['error-message']}>{error}</p>}
       <label className={styles['label-title']} htmlFor="">Email</label>
