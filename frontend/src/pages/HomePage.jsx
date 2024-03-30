@@ -118,9 +118,9 @@ function HomePage() {
         </div>
 
         <div className={styles.footer}>
-          <p>Email</p>
-          <p>Github</p>
-          <p>Polar Flow</p>
+          <p>Email: TBA</p>
+          <Link to='https://github.com/ykdot/Route_Tracker' target="_blank">Github</Link>
+          <Link to='https://flow.polar.com/' target="_blank">Polar Flow</Link>
         </div>
       </div>
       }

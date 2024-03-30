@@ -72,14 +72,14 @@
 
 .third-section {
   background-color: #fef4ea;
-  height: 20rem;
+  height: 10rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  width: calc(100vw - 1rem);
+  padding: 0 1.5rem 0 1.5rem;
 }
 
 .footer {
@@ -93,6 +93,15 @@
   background-color: navy;
   color: white;
   text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover {
+  color: yellow;
 }
 
 @media (max-width: 1200px) {
