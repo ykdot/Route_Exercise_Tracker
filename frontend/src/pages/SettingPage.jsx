@@ -38,7 +38,6 @@ function SettingPage() {
     }
   }
 
-  console.log(auth);
   return (
     <div className={styles.container}>
       <div className={styles['inside-container']}>
