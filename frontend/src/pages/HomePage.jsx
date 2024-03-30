@@ -119,8 +119,8 @@ function HomePage() {
 
         <div className={styles.footer}>
           <p>Email: TBA</p>
-          <Link to='https://github.com/ykdot/Route_Tracker' target="_blank">Github</Link>
-          <Link to='https://flow.polar.com/' target="_blank">Polar Flow</Link>
+          <Link className={styles['outside-link']} to='https://github.com/ykdot/Route_Tracker' target="_blank">Github</Link>
+          <Link className={styles['outside-link']} to='https://flow.polar.com/' target="_blank">Polar Flow</Link>
         </div>
       </div>
       }
