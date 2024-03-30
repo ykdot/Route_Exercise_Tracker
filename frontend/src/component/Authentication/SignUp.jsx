@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link, redirect } from 'react-router-dom';
+import { Link, redirect, useNavigate } from 'react-router-dom';
 import RouteTrackerContext from '../../store/route-tracker-contex';
 import styles from'./AuthenticationBox.module.css';
 
@@ -12,6 +12,8 @@ function SignUp() {
     password: "",
     rePassword: ""
   });
+
+  const navigate = useNavigate();
 
   const [error, setError] = useState('');
 
@@ -35,8 +37,8 @@ function SignUp() {
         throw new Error(responseData.message);
       }
       auth.login(responseData.userID, responseData.username, responseData.token);
-      redirect('/');
-      window.location.reload(); 
+      navigate('/');
+      // window.location.reload(); 
     } catch(err) {
       setError(err.message || "Something went wrong");
     }

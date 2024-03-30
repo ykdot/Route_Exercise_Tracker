@@ -1,5 +1,5 @@
 
-import { Link, redirect } from 'react-router-dom';
+import { Link, redirect, useLocation, useNavigate } from 'react-router-dom';
 import styles from './AuthenticationBox.module.css';
 import { useContext, useState } from 'react';
 import RouteTrackerContext from '../../store/route-tracker-contex';
@@ -11,6 +11,10 @@ function Login() {
     username: "",
     password: ""
   });
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
 
   const [error, setError] = useState('');
 
@@ -33,8 +37,13 @@ function Login() {
         throw new Error(responseData.message);
       }
       auth.login(responseData.userID, responseData.username, responseData.token); 
-      redirect('/');
-      console.log(auth.username);
+
+      navigate('/');
+      // if (location.state?.from) {
+      //   navigate(location.state.from);
+      // }
+      // redirect('/');
+      // console.log(auth.username);
       // window.location.reload();      
     } catch(err) {
       setError(err.message || "Something went wrong!")

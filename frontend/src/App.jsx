@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Layout from './pages/Layout.jsx';
+import ProtectedRoutes from "./ProtectedRoutes.jsx";
 import AuthenticationPage from './pages/AuthenticationPage.jsx';
 import RouteTrackerContext from "./store/route-tracker-contex.jsx";
 import HomePage from "./pages/HomePage.jsx";
@@ -22,9 +23,11 @@ const router = createBrowserRouter([
 
       { path: '/login', element: <AuthenticationPage version={'login'}/>},
       { path: '/signup', element: <AuthenticationPage version={'signup'}/>},
-      { path: '/route', element: <RoutePage />},
-      { path: '/user/:user', element: <UserPage />},
-      { path: '/setting/:user', element: <SettingPage />},
+      { element: <ProtectedRoutes />, children: [
+        { path: '/route', element: <RoutePage />},
+        { path: '/user/:user', element: <UserPage />},
+        { path: '/setting/:user', element: <SettingPage />},        
+      ]},
     ],
   },
 ]);
