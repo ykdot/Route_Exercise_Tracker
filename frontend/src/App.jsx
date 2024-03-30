@@ -9,6 +9,7 @@ import AboutPage from './pages/AboutPage.jsx';
 import DemoPage from './pages/DemoPage.jsx';
 import RoutePage from "./pages/RoutePage.jsx";
 import UserPage from "./pages/UserPage.jsx";
+import SettingPage from "./pages/SettingPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -16,14 +17,14 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: '/', element: <HomePage />},
-      { path: '/about', element: <AboutPage />},
+      // { path: '/about', element: <AboutPage />}, // about page may be redundant for now
       { path: '/demo', element: <DemoPage />},
 
       { path: '/login', element: <AuthenticationPage version={'login'}/>},
       { path: '/signup', element: <AuthenticationPage version={'signup'}/>},
       { path: '/route', element: <RoutePage />},
       { path: '/user/:user', element: <UserPage />},
-
+      { path: '/setting/:user', element: <SettingPage />},
     ],
   },
 ]);

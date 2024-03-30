@@ -27,7 +27,9 @@
   padding-left: 1rem;
   width: 60vw;
   background-color: white;
-  border: 0;
+  border: 1px;
+  border-color: black;
+  border-style: solid;
 }
 
 .container-buttons {

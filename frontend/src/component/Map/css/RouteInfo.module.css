@@ -3,3 +3,12 @@
   width: 30vw;
   overflow: scroll;
 }
+
+.container-header {
+  background-color: navy;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  height: 2rem;
+}

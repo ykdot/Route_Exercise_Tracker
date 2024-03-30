@@ -23,11 +23,11 @@ function Navbar() {
       <nav className={`${classes['link-nav']} ${classes[mobileShow]}`}>
         <Link className={classes['link-button']}>Home</Link>
         {!auth.isLoggedIn && <Link to='/demo' className={classes['link-button']}>Demo</Link>}
-        {!auth.isLoggedIn && <Link to='/about' className={classes['link-button']}>About</Link>}
+        {/* {!auth.isLoggedIn && <Link to='/about' className={classes['link-button']}>About</Link>} */}
         {auth.isLoggedIn && <Link to='/route' className={classes['link-button']}>Routes</Link>}
         {!auth.isLoggedIn && <Link to='/login' className={classes['link-button']}>Log In</Link>}
         {auth.isLoggedIn && <button className={classes['link-button']} onClick={auth.logout}>Log Out</button>}
-        {auth.isLoggedIn && <Link to={`/user/${auth.username}`} className={classes['link-button']}>{auth.username}</Link>}
+        {auth.isLoggedIn && <Link to={`/setting/${auth.username}`} className={classes['link-button']}>{auth.username}</Link>}
       </nav>
     </nav>
   );
