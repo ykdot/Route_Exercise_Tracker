@@ -376,6 +376,58 @@ const getAllUserRoutes = async(req, res, next) => {
   res.status(200).json({ keys: keys, values: user.routes });
 }
 
+// temp solution
+const getUserGeneralInfo = async(req, res, next) => {
+  const userID = req.params.uid;
+
+  let user;
+  try {
+    user = await User.findById(userID);
+  }catch(err) {
+    throw new HttpError('Server error', 500);
+  }
+
+  if (!user) {
+    throw new HttpError('Server error', 401);
+  }
+
+  let keys = [];
+  const userInfo = [];
+  const iterator = user.routes.keys();
+
+  let type = iterator.next().value;
+  while (type !== undefined) {
+    keys.push(type);
+    let distance = 0, longestDistance = 0, longestRoute = '';
+
+    try {
+      
+      for (let i = 0; i < user.routes.get(type).length; i++) {
+        let route = await Route.findById(user.routes.get(type)[i]);
+        distance += route.other.distance;
+        if (route.other.distance > longestDistance) {
+          longestRoute = {
+            id: user.routes.get(type)[i],
+            date: route.date,
+            distance: route.other.distance
+          };
+        }
+      }
+      let typeInfo = {
+        routes: user.routes.get(type).length,
+        distance: distance,
+        longest: longestRoute
+      };
+      
+      userInfo.push(typeInfo);
+    }catch(err) {
+      throw new HttpError(err, 401);
+    }
+    type = iterator.next().value;
+  }
+  res.status(200).json({ keys: keys, info: userInfo });
+}
+
 const filterExercise = async(uid, exercises, token) => {
   let userAuthorization = 'Bearer ' + token;
 
@@ -586,3 +638,4 @@ exports.getUserRoutes = getUserRoutes;
 exports.deleteAccount = deleteAccount;
 
 exports.getAllUserRoutes = getAllUserRoutes;
+exports.getUserGeneralInfo = getUserGeneralInfo;
