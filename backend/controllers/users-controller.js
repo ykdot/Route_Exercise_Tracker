@@ -144,12 +144,14 @@ const connectToPolarAPI = async(req, res, next) => {
   // code === authentication code from Polar
   const code = req.body.code;
   const uid = req.body.uid;
+  const redirect_uri = req.body.uri;
+  console.log(redirect_uri);
   
   const api_auth = 'Basic ' + btoa(basic_auth);
   const api_data = new URLSearchParams({
     'grant_type': "authorization_code",
     'code': code,
-    // 'redirect_uri': 'http://localhost:5173'
+    'redirect_uri': redirect_uri
   }) ;
 
   let accessToken;
@@ -168,7 +170,8 @@ const connectToPolarAPI = async(req, res, next) => {
 
     // proper user check needed later 
     const responseData = await data.json();
-    accessToken = responseData.access_token
+    accessToken = responseData.access_token;
+    console.log(accessToken);
     // get / check the apiID to make sure the id connects with the user
   }catch(err) {
     throw new Error(err);
