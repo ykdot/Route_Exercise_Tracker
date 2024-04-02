@@ -1,11 +1,17 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import RouteTrackerContext from '../../store/route-tracker-contex';
 import classes from './Navbar.module.css';
 
 function Navbar() {
   const auth = useContext(RouteTrackerContext);
   const [ mobileList, setMobileList ] = useState(false);
+  // const navigate = useNavigate();
+
+  // const handleLogout = () => {
+  //   auth.logout();
+  //   // navigate('/');
+  // }
 
   let mobileShow;
   // show list or not for mobile version
@@ -21,13 +27,14 @@ function Navbar() {
         <img className={classes.icon} src="/hamburger-icon.svg" alt="Hamburger Icon" />
       </button>
       <nav className={`${classes['link-nav']} ${classes[mobileShow]}`}>
-        <Link className={classes['link-button']}>Home</Link>
+        {!auth.isLoggedIn && <Link className={classes['link-button']}>Home</Link>}
         {!auth.isLoggedIn && <Link to='/demo' className={classes['link-button']}>Demo</Link>}
         {/* {!auth.isLoggedIn && <Link to='/about' className={classes['link-button']}>About</Link>} */}
-        {auth.isLoggedIn && <Link to='/route' className={classes['link-button']}>Routes</Link>}
+        {auth.isLoggedIn && <Link to={`/user-home`} className={classes['link-button']}>User</Link>}
+        {auth.isLoggedIn && <Link to='/user-routes' className={classes['link-button']}>Routes</Link>}
         {!auth.isLoggedIn && <Link to='/login' className={classes['link-button']}>Log In</Link>}
-        {auth.isLoggedIn && <button className={classes['link-button']} onClick={auth.logout}>Log Out</button>}
         {auth.isLoggedIn && <Link to={`/setting/${auth.username}`} className={classes['link-button']}>Setting</Link>}
+        {auth.isLoggedIn && <button className={classes['log-out-button']} onClick={auth.logout}>Log Out</button>}
       </nav>
     </nav>
   );

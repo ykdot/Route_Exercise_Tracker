@@ -8,7 +8,8 @@ function ProtectedRoutes() {
   const location = useLocation();
 
 
-  return auth.isLoggedIn ? <Outlet /> : <Navigate to ='/' replace state={{ from: location }}/>;
+  // temp solution; auth is not loading correctly
+  return JSON.parse(localStorage.getItem('userData')) !== null ? <Outlet /> : <Navigate to ='/' replace state={{ from: location }}/>;
 }
 
 export default ProtectedRoutes;

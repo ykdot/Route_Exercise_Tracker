@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
 
 import Layout from './pages/Layout.jsx';
 import ProtectedRoutes from "./ProtectedRoutes.jsx";
@@ -24,8 +24,8 @@ const router = createBrowserRouter([
       { path: '/login', element: <AuthenticationPage version={'login'}/>},
       { path: '/signup', element: <AuthenticationPage version={'signup'}/>},
       { element: <ProtectedRoutes />, children: [
-        { path: '/route', element: <RoutePage />},
-        { path: '/user/:user', element: <UserPage />},
+        { path: '/user-routes', element: <RoutePage />},
+        { path: '/user-home', element: <UserPage />},
         { path: '/setting/:user', element: <SettingPage />},        
       ]},
     ],
@@ -42,8 +42,8 @@ function App() {
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
   const [apiToken, setApiToken] = useState(false);
+  const [apiID, setApiID] = useState(null);
   const [isPolarAuthenticated, setIsPolarAuthenticated] = useState(false);
-
 
   const login = useCallback((uid, username, email, token, expirationDate ) => {
     setToken(token);
@@ -64,6 +64,7 @@ function App() {
     setEmail(null);
     setTokenExpirationDate(null);
     setApiToken(null);
+    setApiID(null);
     setIsPolarAuthenticated(false);
     // localStorage.removeItem('userData');
     // all local storage clear; too generaltho
@@ -73,6 +74,7 @@ function App() {
 
   const apiLogin = useCallback((token, apiID) => {
     setApiToken(token);
+    setApiID(apiID);
     setIsPolarAuthenticated(true);
     localStorage.setItem(
       'apiToken', 
@@ -108,6 +110,7 @@ function App() {
         logout: logout,
         apiToken: apiToken,
         isPolarAuthenticated: isPolarAuthenticated,
+        apiID: apiID,
         apiLogin: apiLogin     
       }}>
       <RouterProvider router={router}/>

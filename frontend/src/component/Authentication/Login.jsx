@@ -38,7 +38,7 @@ function Login() {
       }
       auth.login(responseData.userID, responseData.username, responseData.email, responseData.token); 
 
-      navigate('/');
+      navigate(`/user-home`);
       // if (location.state?.from) {
       //   navigate(location.state.from);
       // }

@@ -37,7 +37,7 @@ function SignUp() {
         throw new Error(responseData.message);
       }
       auth.login(responseData.userID, responseData.username, responseData.email, responseData.token);
-      navigate('/');
+      navigate('/user-home');
       // window.location.reload(); 
     } catch(err) {
       setError(err.message || "Something went wrong");
