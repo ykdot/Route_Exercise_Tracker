@@ -1,16 +1,44 @@
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  padding-top: 5rem;
-  background: green;
-  height: calc(100vh - 10rem);
+  align-items: center;
+  padding-top: 1rem;
+  gap: 1rem;
 }
 
-.inside-container {
+.user-container {
+  padding: 2rem;
+  background-color: aliceblue;
+  border-radius: 2rem;
+  width: 80vw;
+  text-align: center;
+}
+
+.addition-container {
+  display: flex;
+  flex-direction: row;  
+  gap: 2rem;
+ 
+}
+
+.addition-card {
+  text-decoration: none;
+  padding: 1rem;
+  background-color: aquamarine;
+  color: black;
+  border-style: none;
+  font-size: 1rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.addition-card:hover {
+  background-color: aqua;
+}
+
+
+.info-card {
+  width: 80vw;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 4rem 4rem;
-  border-radius: 2rem;
-  background-color: aquamarine;
 }

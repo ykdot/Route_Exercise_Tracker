@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import RouteTrackerContext from '../store/route-tracker-contex';
 import styles from './css/UserPage.module.css';
@@ -6,6 +6,7 @@ import styles from './css/UserPage.module.css';
 function UserPage() {
 
   const auth = useContext(RouteTrackerContext);
+  const [userInfo, setUserInfo] = useState(null);
 
   const url = window.location.href;
 
@@ -67,17 +68,51 @@ function UserPage() {
   if (url !== `http://localhost:5173/user-home` && localStorage.getItem('apiSearch') === null && new URL(url).searchParams.get("code") !== null) {
     authenticatePolarUser();
   } 
+
+  useEffect(() => {
+    try {
+      const response = async() => {
+        const data = await fetch(`http://localhost:5000/api/users/get-general-user-info/${JSON.parse(localStorage.getItem('userData')).userID}`, 
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        }); 
+        const responseData = await data.json();
+        setUserInfo(responseData);     
+      };
+      response();
+    }catch(err) {
+      throw new Error(err);
+    }
+  }, []);
   
   return (
-    <div>
-      <div>
+    <div className={styles.container}>
+      <div className={styles['user-container']}>
         <h1>Welcome, {auth.username}</h1>
       </div>
-      <div>
-        {auth.apiID === null && <Link to='https://flow.polar.com/oauth2/authorization?response_type=code&client_id=08ae0351-2e51-4723-a705-fbadd45aa5fc&redirect_uri=http://localhost:5173/user-home'>Authentication</Link>}
-        {auth.apiID !== null && <button onClick={getData}>get user data</button>}            
+      <div className={styles['addition-container']}>
+        {auth.apiID === null && <Link className={styles['addition-card']} to='https://flow.polar.com/oauth2/authorization?response_type=code&client_id=08ae0351-2e51-4723-a705-fbadd45aa5fc&redirect_uri=http://localhost:5173/user-home'>Authentication</Link>}
+        {auth.apiID !== null && <button className={styles['addition-card']} onClick={getData}>get user data</button>}   
+        <button className={styles['addition-card']}>Manual Add</button>         
       </div>
 
+      {
+        userInfo === null &&
+        <div>
+          Loading
+        </div>
+      }
+
+      {
+        userInfo !== null &&
+        <div>
+          Some result
+        </div>
+      }
+      
     </div>
   );
 }

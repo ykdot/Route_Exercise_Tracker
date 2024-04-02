@@ -36,7 +36,7 @@ let logoutTimer;
 function App() {
   const auth = useContext(RouteTrackerContext);
   const [token, setToken] = useState(false);
-  const [userID, setUserID] = useState(false);
+  const [userID, setUserID] = useState(null);
   const [username, setUsername ] = useState(false);
   const [email, setEmail] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
