@@ -41,4 +41,11 @@
   width: 80vw;
   display: flex;
   flex-direction: column;
+  background-color: aliceblue;
+  padding: 2rem;
+  border-radius: 2rem;
+}
+
+.no-routes {
+  padding-top: 5rem;
 }

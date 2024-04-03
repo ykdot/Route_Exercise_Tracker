@@ -41,3 +41,9 @@
 .container-right {
   width: 20%;
 }
+
+.loading-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

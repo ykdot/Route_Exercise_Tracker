@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import uuid from 'react-uuid';
+import { Circles } from "react-loader-spinner";
 import RTMap from "../component/Map/RTMap";
 import RouteInfo from "../component/Map/RouteInfo";
 import RouteTrackerContext from "../store/route-tracker-contex";
@@ -12,7 +13,7 @@ function RoutePage() {
   const auth = useContext(RouteTrackerContext);
   const [routeTypes, setRouteTypes] = useState();
   const [routeType, setRouteType] = useState();
-  const [routeData, setRouteData] = useState();
+  const [routeData, setRouteData] = useState(null);
 
   const navigate = useNavigate();
   if (!auth.isLoggedIn) {
@@ -115,25 +116,47 @@ function RoutePage() {
 
   console.log(routeData);
   return (
-    <div className={styles['map-info']}>
-      {routeTypes !== undefined &&
-        <div className={styles['container-map']}>
-          <div className={styles['container-header']}>
-            <select value={routeData[0].type} className={styles['container-select']} onChange={e => handleGetList(e.target.value)}>
-              {routeTypes.map(type => (
-                type === routeType ? (<option key={uuid()} value={type} >{type} </option>)
-                : <option key={uuid()}>{type} </option>
-              ))}
-            </select>  
-            {!auth.isPolarAuthenticated && <button>Polar Authenticate</button>}   
-            {auth.isPolarAuthenticated && <button className={styles['container-button']} onClick={getNewData}>Update via Polar</button>}
-            <button className={styles['container-button']}>Manual Add</button>     
-          </div>
-          <RTMap key={uuid()} routes={routeData}/>
-      </div>
+    <>
+      {
+        routeData === null && 
+        <div className={styles['loading-image']}>
+          <Circles
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="circles-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            />           
+        </div>
+      
       }
-      {routeTypes !== undefined && <RouteInfo className={styles['container-right']} data={routeData}/>}
-    </div>
+      {
+        routeData !== null && 
+        <div className={styles['map-info']}>
+          {routeTypes !== undefined &&
+            <div className={styles['container-map']}>
+              <div className={styles['container-header']}>
+                <select value={routeData[0].type} className={styles['container-select']} onChange={e => handleGetList(e.target.value)}>
+                  {routeTypes.map(type => (
+                    type === routeType ? (<option key={uuid()} value={type} >{type} </option>)
+                    : <option key={uuid()}>{type} </option>
+                  ))}
+                </select>  
+                {!auth.isPolarAuthenticated && <button>Polar Authenticate</button>}   
+                {auth.isPolarAuthenticated && <button className={styles['container-button']} onClick={getNewData}>Update via Polar</button>}
+                <button className={styles['container-button']}>Manual Add</button>     
+              </div>
+              <RTMap key={uuid()} routes={routeData}/>
+          </div>
+          }
+          {routeTypes !== undefined && <RouteInfo className={styles['container-right']} data={routeData}/>}
+        </div>        
+      }
+
+    </>
+
   );
 }
 

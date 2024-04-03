@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import uuid from 'react-uuid';
+import { Circles } from 'react-loader-spinner';
 import RouteTrackerContext from '../store/route-tracker-contex';
 import styles from './css/UserPage.module.css';
 
@@ -7,6 +9,11 @@ function UserPage() {
 
   const auth = useContext(RouteTrackerContext);
   const [userInfo, setUserInfo] = useState(null);
+
+  if (userInfo !== null) {
+    console.log(userInfo.info);
+
+  }
 
   const url = window.location.href;
 
@@ -95,22 +102,46 @@ function UserPage() {
       </div>
       <div className={styles['addition-container']}>
         {auth.apiID === null && <Link className={styles['addition-card']} to='https://flow.polar.com/oauth2/authorization?response_type=code&client_id=08ae0351-2e51-4723-a705-fbadd45aa5fc&redirect_uri=http://localhost:5173/user-home'>Authentication</Link>}
-        {auth.apiID !== null && <button className={styles['addition-card']} onClick={getData}>get user data</button>}   
+        {auth.apiID !== null && <button className={styles['addition-card']} onClick={getData}>Get Polar User Data</button>}   
         <button className={styles['addition-card']}>Manual Add</button>         
       </div>
 
       {
         userInfo === null &&
-        <div>
-          Loading
-        </div>
+        <Circles
+          height="80"
+          width="80"
+          color="#4fa94d"
+          ariaLabel="circles-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+          />
       }
 
       {
         userInfo !== null &&
-        <div>
-          Some result
-        </div>
+        
+        <>
+          {
+            userInfo.info.length === 0 &&
+            <div className={styles['no-routes']}>
+              <h1>Add Some Route to Get Started</h1>
+            </div>
+          }
+
+          {
+            userInfo.info.length !== 0 &&
+            userInfo.info.map(type => (
+              <div key={uuid()} className={styles['info-card']}>
+                <h1>{type.key}</h1>
+                <p>Total Routes: {type.routes}</p>
+                <p>Total Distance: {type.distance} Meters</p>
+                <p>Longest Individual Route: {type.longest.distance} Meters</p>
+              </div>
+            ))
+          }
+        </>
       }
       
     </div>
