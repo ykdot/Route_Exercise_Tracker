@@ -391,13 +391,11 @@ const getUserGeneralInfo = async(req, res, next) => {
     throw new HttpError('Server error', 401);
   }
 
-  let keys = [];
   const userInfo = [];
   const iterator = user.routes.keys();
 
   let type = iterator.next().value;
   while (type !== undefined) {
-    keys.push(type);
     let distance = 0, longestDistance = 0, longestRoute = '';
 
     try {
@@ -414,6 +412,7 @@ const getUserGeneralInfo = async(req, res, next) => {
         }
       }
       let typeInfo = {
+        key: type,
         routes: user.routes.get(type).length,
         distance: distance,
         longest: longestRoute
@@ -425,7 +424,7 @@ const getUserGeneralInfo = async(req, res, next) => {
     }
     type = iterator.next().value;
   }
-  res.status(200).json({ keys: keys, info: userInfo });
+  res.status(200).json({ info: userInfo });
 }
 
 const filterExercise = async(uid, exercises, token) => {
