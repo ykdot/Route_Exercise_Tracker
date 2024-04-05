@@ -153,9 +153,9 @@ function RoutePage() {
                   <select className={styles['container-select']} ></select> 
                 }
 
-                {!auth.isPolarAuthenticated && <button>Polar Authenticate</button>}   
-                {auth.isPolarAuthenticated && <button className={styles['container-button']} onClick={getNewData}>Update via Polar</button>}
-                <button className={styles['container-button']}>Manual Add</button>     
+                {!auth.isPolarAuthenticated && <button className={styles['container-buttons']}>Polar Authenticate</button>}   
+                {auth.isPolarAuthenticated && <button className={styles['container-buttons']} onClick={getNewData}>Update via Polar</button>}
+                <button className={styles['container-buttons']}>Manual Add</button>     
               </div>
               <RTMap key={uuid()} routes={routeData}/>
           </div>
