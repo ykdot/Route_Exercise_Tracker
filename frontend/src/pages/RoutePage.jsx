@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import uuid from 'react-uuid';
 import { Circles } from "react-loader-spinner";
 import RTMap from "../component/Map/RTMap";
@@ -64,6 +64,40 @@ function RoutePage() {
     }
   }
 
+  const url = window.location.href;
+
+  const authenticatePolarUser = async () => {
+    const code = new URL(url).searchParams.get("code"); 
+    try {
+      localStorage.setItem(
+        'apiSearch', 
+        JSON.stringify({ value: true }));
+      const data = await fetch(`http://localhost:5000/api/users/connect-api`, 
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          code: code,
+          uid: JSON.parse(localStorage.getItem('userData')).userID,
+          uri: 'http://localhost:5173/user-routes'
+        })  
+      }); 
+
+      // proper user check needed later 
+      const responseData = await data.json();
+      console.log(responseData); 
+      auth.apiLogin(responseData.token, responseData.apiID);
+      // localStorage.setItem(
+      //   'apiToken', 
+      //   JSON.stringify({ apiID: responseData.apiID, token: responseData.token }));
+      
+    }catch(err) {
+      throw new Error(err);
+    }    
+  }
+
 
   // fetch route
   useEffect(() => {
@@ -117,6 +151,11 @@ function RoutePage() {
   }, []);
 
   console.log(routeData);
+
+  // potential loopholes
+  if (url !== 'http://localhost:5173/user-routes' && localStorage.getItem('apiSearch') === null) {
+    authenticatePolarUser();
+  } 
   return (
     <>
       {
@@ -153,7 +192,7 @@ function RoutePage() {
                   <select className={styles['container-select']} ></select> 
                 }
 
-                {!auth.isPolarAuthenticated && <button className={styles['container-buttons']}>Polar Authenticate</button>}   
+                {!auth.isPolarAuthenticated && <Link className={styles['auth-link']} to='https://flow.polar.com/oauth2/authorization?response_type=code&client_id=08ae0351-2e51-4723-a705-fbadd45aa5fc&redirect_uri=http://localhost:5173/user-routes'>Authentication</Link>}   
                 {auth.isPolarAuthenticated && <button className={styles['container-buttons']} onClick={getNewData}>Update via Polar</button>}
                 <button className={styles['container-buttons']}>Manual Add</button>     
               </div>
