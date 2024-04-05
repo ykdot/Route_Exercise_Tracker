@@ -10,11 +10,6 @@ function UserPage() {
   const auth = useContext(RouteTrackerContext);
   const [userInfo, setUserInfo] = useState(null);
 
-  if (userInfo !== null) {
-    console.log(userInfo.info);
-
-  }
-
   const url = window.location.href;
 
   const authenticatePolarUser = async () => {
@@ -39,11 +34,7 @@ function UserPage() {
       // proper user check needed later 
       const responseData = await data.json();
       console.log(responseData); 
-      auth.apiLogin(responseData.token, responseData.apiID);
-      // localStorage.setItem(
-      //   'apiToken', 
-      //   JSON.stringify({ apiID: responseData.apiID, token: responseData.token }));
-      
+      auth.apiLogin(responseData.token, responseData.apiID);   
     }catch(err) {
       throw new Error(err);
     }    

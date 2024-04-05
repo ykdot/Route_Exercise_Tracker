@@ -1,18 +1,9 @@
-import { useCallback, useContext, useState } from "react";
-import { MapContainer, FeatureGroup, Polyline, TileLayer } from "react-leaflet";
+import { MapContainer, FeatureGroup, TileLayer } from "react-leaflet";
 import EnhancedPolyline from "../Polyline/EnhancedPolyline";
-import RouteContext from "../../store/routes-context";
 import styles from './css/RTMap.module.css';
 
-// i will probably use routes later as I will utilize other data with routes, meaning I will have to fetch the data
-// center issue will be resolved 
 function RTMap({routes}) {
-  // const [routeData, setRouteData] = useState(routes);
-  // const [center, setCenter] = useState(routes[0].points[0]);
-
   let center = [37.779352076644116, -122.38954362670768];
-
-  console.log(routes);
 
   if (routes !== undefined && JSON.stringify(routes) !== '{}') {
     center = routes[0].points[0];

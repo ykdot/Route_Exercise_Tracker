@@ -2,6 +2,7 @@ const demoData = () => {
   const col = {
     "WALKING": [
       {
+        "_id": 1000,
         "type": "WALKING",
         "date": "2024-03-18T20:14:01",
         "points": [
@@ -2886,6 +2887,7 @@ const demoData = () => {
         "__v": 0
       },
       {
+        "_id": 1001,
         "type": "WALKING",
         "date": "2024-03-18T20:00:05",
         "points": [
@@ -3780,6 +3782,7 @@ const demoData = () => {
     ],
     "RUNNING": [
       {
+        "_id": 1002,
         "type": "RUNNING",
         "date": "2024-03-18T19:52:32",
         "points": [
@@ -5484,6 +5487,7 @@ const demoData = () => {
         "__v": 0
       },
       {
+        "_id": 1003,
         "type": "RUNNING",
         "date": "2024-03-18T20:04:11",
         "points": [

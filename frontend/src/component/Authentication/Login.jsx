@@ -1,5 +1,5 @@
 
-import { Link, redirect, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './AuthenticationBox.module.css';
 import { useContext, useState } from 'react';
 import RouteTrackerContext from '../../store/route-tracker-contex';
@@ -76,7 +76,6 @@ function Login() {
       <input className={styles['input-title']} value={enteredAuthData.password} onChange={handleChangePassword} type='password' placeholder='Password'/>   
       <input className={styles['submit-button']} type='submit' value='LOGIN'/> 
       <Link to='/signup' className={styles['alt-button']}>Sign up</Link>
-
     </form>
   );
 }

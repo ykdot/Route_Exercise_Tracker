@@ -88,16 +88,11 @@ function RoutePage() {
       // proper user check needed later 
       const responseData = await data.json();
       console.log(responseData); 
-      auth.apiLogin(responseData.token, responseData.apiID);
-      // localStorage.setItem(
-      //   'apiToken', 
-      //   JSON.stringify({ apiID: responseData.apiID, token: responseData.token }));
-      
+      auth.apiLogin(responseData.token, responseData.apiID);     
     }catch(err) {
       throw new Error(err);
     }    
   }
-
 
   // fetch route
   useEffect(() => {
@@ -130,11 +125,6 @@ function RoutePage() {
           setRouteTypes(responseData.types);
           setRouteType(responseData.types[0]);
           setRouteData(responseData2.list);          
-          // console.log(responseData.values);
-          // localStorage.setItem(
-          //   'routeData', 
-          //   JSON.stringify({ keys: responseData.keys, values: responseData.values }));
-          // setRouteTypes(responseData.keys[0]);
         }
         else {
           console.log(responseData);
@@ -149,8 +139,6 @@ function RoutePage() {
       throw new Error(err);
     }    
   }, []);
-
-  console.log(routeData);
 
   // potential loopholes
   if (url !== 'http://localhost:5173/user-routes' && localStorage.getItem('apiSearch') === null) {

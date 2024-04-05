@@ -4,12 +4,9 @@ import { Polyline, Popup } from "react-leaflet";
 function EnhancedPolyline({positions, color}) {
   const [isSelected, setSelectedStatus] = useState(false);
 
-
   if (isSelected) {
     color = 'blue';
   }
-
-  console.log(color);
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link, redirect, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import RouteTrackerContext from '../../store/route-tracker-contex';
 import styles from'./AuthenticationBox.module.css';
 

@@ -1,12 +1,11 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { createBrowserRouter, RouterProvider, useNavigate } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Layout from './pages/Layout.jsx';
 import ProtectedRoutes from "./ProtectedRoutes.jsx";
 import AuthenticationPage from './pages/AuthenticationPage.jsx';
 import RouteTrackerContext from "./store/route-tracker-contex.jsx";
 import HomePage from "./pages/HomePage.jsx";
-import AboutPage from './pages/AboutPage.jsx';
 import DemoPage from './pages/DemoPage.jsx';
 import RoutePage from "./pages/RoutePage.jsx";
 import UserPage from "./pages/UserPage.jsx";
@@ -66,10 +65,8 @@ function App() {
     setApiToken(null);
     setApiID(null);
     setIsPolarAuthenticated(false);
-    // localStorage.removeItem('userData');
     // all local storage clear; too generaltho
     localStorage.clear();
-    // window.location.reload(); 
   }, []);
 
   const apiLogin = useCallback((token, apiID) => {

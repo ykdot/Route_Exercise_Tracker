@@ -5,9 +5,7 @@ function RouteInfoBox({data}) {
   const [detailStatus, setDetailStatus] = useState(false);
 
   let detailBox;
-
-
-
+  
   if (detailStatus) {
    detailBox = 'container';
   }
