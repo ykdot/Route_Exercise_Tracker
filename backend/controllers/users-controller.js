@@ -404,6 +404,7 @@ const getUserGeneralInfo = async(req, res, next) => {
         let route = await Route.findById(user.routes.get(type)[i]);
         distance += route.other.distance;
         if (route.other.distance > longestDistance) {
+          longestDistance = route.other.distance;
           longestRoute = {
             id: user.routes.get(type)[i],
             date: route.date,
