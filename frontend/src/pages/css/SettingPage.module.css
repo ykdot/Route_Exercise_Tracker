@@ -21,3 +21,9 @@
   border-radius: 1rem;
   border-style: solid;
 }
+
+.loading-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

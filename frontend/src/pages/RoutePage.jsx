@@ -56,7 +56,7 @@ function RoutePage() {
       }); 
 
       // proper user check needed later 
-      const responseData = await data.json();
+      const responseData = await data.status;
       console.log(responseData);
       window.location.reload(); 
     }catch(err) {

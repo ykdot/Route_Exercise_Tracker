@@ -1,14 +1,9 @@
 import { Link } from "react-router-dom";
 import styles from './css/HomePage.module.css';
 
-
 function HomePage() {
   return (
     <>
-      {auth.isLoggedIn && <Link to='https://flow.polar.com/oauth2/authorization?response_type=code&client_id=08ae0351-2e51-4723-a705-fbadd45aa5fc'>Authentication</Link>}
-      {auth.isLoggedIn && <button onClick={getData}>get user data</button>}
-
-      {!auth.isLoggedIn &&
       <div className={styles['info-container']}>
         <div className={styles['first-section']}>
           <div className={styles['first-left']}>
@@ -55,7 +50,6 @@ function HomePage() {
           <Link className={styles['outside-link']} to='https://flow.polar.com/' target="_blank">Polar Flow</Link>
         </div>
       </div>
-      }
     </>
   );
 }
