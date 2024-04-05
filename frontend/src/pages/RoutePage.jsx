@@ -103,8 +103,10 @@ function RoutePage() {
           // setRouteTypes(responseData.keys[0]);
         }
         else {
+          console.log(responseData);
           setRouteTypes(responseData.types);
           setRouteType(responseData.types[0]);
+          setRouteData(responseData.list);          
         }
       }
 
@@ -138,12 +140,19 @@ function RoutePage() {
           {routeTypes !== undefined &&
             <div className={styles['container-map']}>
               <div className={styles['container-header']}>
-                <select value={routeData[0].type} className={styles['container-select']} onChange={e => handleGetList(e.target.value)}>
-                  {routeTypes.map(type => (
-                    type === routeType ? (<option key={uuid()} value={type} >{type} </option>)
-                    : <option key={uuid()}>{type} </option>
-                  ))}
-                </select>  
+                { JSON.stringify(routeData) !== '{}' && 
+                  <select value={routeData[0].type} className={styles['container-select']} onChange={e => handleGetList(e.target.value)}>
+                    {routeTypes.map(type => (
+                      type === routeType ? (<option key={uuid()} value={type} >{type} </option>)
+                      : <option key={uuid()}>{type} </option>
+                    ))}
+                  </select> 
+                }
+
+                { JSON.stringify(routeData) === '{}' && 
+                  <select className={styles['container-select']} ></select> 
+                }
+
                 {!auth.isPolarAuthenticated && <button>Polar Authenticate</button>}   
                 {auth.isPolarAuthenticated && <button className={styles['container-button']} onClick={getNewData}>Update via Polar</button>}
                 <button className={styles['container-button']}>Manual Add</button>     

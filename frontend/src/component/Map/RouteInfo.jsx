@@ -9,7 +9,7 @@ function RouteInfo({data}) {
       <div className={styles['container-header']}>
         Routes
       </div>
-      {data !== undefined && data.map(data => (
+      {(data !== undefined && JSON.stringify(data) !== '{}') && data.map(data => (
         <RouteInfoBox key={uuid()} data={data}/>
           ))}      
     </div>

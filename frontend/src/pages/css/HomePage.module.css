@@ -89,7 +89,8 @@
   align-self: center;
   gap: 1rem;
   height: 10rem;
-  width: calc(100vw - 1rem);
+  width: 100vw;
+  /* width: calc(100vw - 1rem); */
   background-color: navy;
   color: white;
   text-align: center;

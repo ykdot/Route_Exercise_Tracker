@@ -14,7 +14,7 @@ function RTMap({routes}) {
 
   console.log(routes);
 
-  if (routes !== undefined && routes.length !== 0) {
+  if (routes !== undefined && JSON.stringify(routes) !== '{}') {
     center = routes[0].points[0];
   }
 
@@ -26,7 +26,7 @@ function RTMap({routes}) {
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
         <FeatureGroup>
         </FeatureGroup>
-        {(routes !== undefined || routes.length === 0)&& routes.map(route => (
+        {(routes !== undefined && JSON.stringify(routes) !== '{}') && routes.map(route => (
           <EnhancedPolyline key={route._id} positions={route.points} color="red"/>
             ))}
       </MapContainer>
