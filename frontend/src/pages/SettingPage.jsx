@@ -11,34 +11,40 @@ function SettingPage() {
   const [deleteLoad, setDeleteLoad] = useState(false);
 
   if (deleteLoad === true) {
-    const handleDeleteAccount = async() => {
-      // prompt to ask user; model implementation in future
+    if (JSON.parse(localStorage.getItem('apiToken')) === null) {
+      console.log("please authenticate first");
+      setDeleteLoad(false);
+    }
+    else {
+      const handleDeleteAccount = async() => {
+        // prompt to ask user; model implementation in future
 
-      const userID = JSON.parse(localStorage.getItem('userData')).userID;
-      const apiID = JSON.parse(localStorage.getItem('apiToken')).apiID;
-      const token = JSON.parse(localStorage.getItem('apiToken')).token;
+        const userID = JSON.parse(localStorage.getItem('userData')).userID;
+        const apiID = JSON.parse(localStorage.getItem('apiToken')).apiID;
+        const token = JSON.parse(localStorage.getItem('apiToken')).token;
 
-      // if polar authenticated, go ahead and delete or if no polar connection, go ahead and delete
-      try {
-        const response = await fetch(`http://localhost:5000/api/users/delete-account/${userID}/${apiID}/${token}`, 
-          {
-            method: 'DELETE',
-            // headers: {
-            //   'Authorization': `Bearer ${auth.token}` ,
-            // },
-          });
-        
-        await response.json();
-        auth.logout();
-        localStorage.clear();
-        console.log("This should be the time to redirect");
-        navigate('/');
-      }catch(err) {
-        throw new Error(err);
+        // if polar authenticated, go ahead and delete or if no polar connection, go ahead and delete
+        try {
+          const response = await fetch(`http://localhost:5000/api/users/delete-account/${userID}/${apiID}/${token}`, 
+            {
+              method: 'DELETE',
+              // headers: {
+              //   'Authorization': `Bearer ${auth.token}` ,
+              // },
+            });
+          
+          await response.json();
+          auth.logout();
+          localStorage.clear();
+          console.log("This should be the time to redirect");
+          navigate('/');
+        }catch(err) {
+          throw new Error(err);
+        }
       }
+      handleDeleteAccount();      
     }
 
-    handleDeleteAccount();
   }
 
   return (
@@ -68,7 +74,6 @@ function SettingPage() {
           </div>
       }
     </>
-
   );
 }
 
