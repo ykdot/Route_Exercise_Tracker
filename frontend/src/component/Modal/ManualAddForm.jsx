@@ -7,6 +7,7 @@ function ManualAddForm() {
   const auth = useContext(RouteTrackerContext);
   const [enteredData, setEnteredData] = useState({
     file: "",
+    type: "",
     distance: "",
     time: "",
     duration: "",
@@ -19,29 +20,30 @@ function ManualAddForm() {
 
   const handleSubmit = async(event) => {
     event.preventDefault();
-    console.log(auth.userID);
+    console.log(enteredData.type);
     try {
       setIsLoading(true);
-      // const response = await fetch('', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   body: JSON.stringify({
-      //     uid: auth.userID,
-      //     file: enteredData.file,
-      //     distance: enteredData.distance,
-      //     time: enteredData.time,
-      //     duration: enteredData.duration,
-      //     calories: enteredData.calories,
-      //   })        
-      // });
+      const response = await fetch('http://localhost:5000/api/routes/manual-add-route', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          uid: auth.userID,
+          file: enteredData.file,
+          type: enteredData.type,
+          distance: enteredData.distance,
+          time: enteredData.time,
+          duration: enteredData.duration,
+          calories: enteredData.calories,
+        })        
+      });
 
-      // const responseData = await response.json();
-      // if (!response.ok) {
-      //   throw new Error(responseData.message);
-      // }
-      // console.log(responseData);      
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
+      console.log(responseData);      
 
 
       setIsLoading(false);
@@ -57,6 +59,14 @@ function ManualAddForm() {
     setEnteredData((prevValue) => ({
       ...prevValue,
       file: event.target.value
+    }));
+  }
+
+  function handleChangeType(event) {
+    console
+    setEnteredData((prevValue) => ({
+      ...prevValue,
+      type: event.target.value
     }));
   }
 
@@ -89,8 +99,9 @@ function ManualAddForm() {
       calories: event.target.value
     }));
   }
+  console.log(enteredData.file.split('.').pop());
   
-  const submitStatus = (enteredData.file !== "")? "eligible-button" : "disabled" ;
+  const submitStatus = (enteredData.file !== "" && enteredData.type !== "")? "eligible-button" : "disabled" ;
   return (
     <>
       {!isLoading &&
@@ -98,7 +109,9 @@ function ManualAddForm() {
           <h1>Add a Route</h1>
           {error != '' && <p className={styles['error-message']}>{error}</p>}
           <label htmlFor="">GPX File:</label>
-          <input type="file" accept=".gpx" onChange={handleChangeFile}/>      
+          <input type="file" accept=".gpx" onChange={handleChangeFile}/>  
+          <label htmlFor="">Route Type: </label>
+          <input type="text" value={enteredData.type} onChange={handleChangeType} placeholder=''/>    
           <label htmlFor="">Distance: </label>
           <input type="text" value={enteredData.distance} onChange={handleChangeDistance} placeholder=''/>
           <label htmlFor="">Time: </label>
