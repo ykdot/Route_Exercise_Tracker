@@ -542,9 +542,15 @@ const createRoute = async(uid, route, coord) => {
   // create new route
   const createdRoute = new Route({
     user: user,
+    method: "POLAR",
     type: route['detailed-sport-info'],
+    distance: route['distance'],
     date: route['start-time'],
+    duration: route['duration'],
+    calories: route['calories'],
     points: coord,
+    heartRate: route['heart-rate'],
+    // temp
     other: route
   });
 
@@ -637,7 +643,7 @@ const deleteAccount = async(req, res, next) => {
 
     await sess.commitTransaction();
   }catch(err) {
-    throw new HttpError('Server error', 500);   
+    throw new HttpError(err, 500);   
   }
 
   res.status(202).json({ message: "Successfully deleted account" });

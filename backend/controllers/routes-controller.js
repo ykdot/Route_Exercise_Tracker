@@ -49,6 +49,31 @@ const getRoute = async(req, res) => {
   res.json({route: route});
 }
 
+const manualAddRoute = async(req, res, next) => {
+  const {uid, file, distance, time, duration, calories} = req.body;
+
+  let existingUser;
+  try {
+    existingUser = await User.findById(uid);
+  }catch(err) {
+    return next(new HttpError("Server Error", 500));
+  }
+
+  // throw an error if userID does not point to any user
+  if (!existingUser) {
+    return next(new HttpError("User doesn't exist", 500));
+  }
+
+  const newRoute = new Route({
+    
+  });
+
+
+
+
+
+}
+
 const deleteRoute = async(req, res, next) => {
   const uid = req.params.uid;
   const rid = req.params.rid;  
@@ -66,10 +91,6 @@ const deleteRoute = async(req, res, next) => {
   if (!route) {
     throw new HttpError('Route does not exist', 401);
   }
-
-  // console.log(routeType);
-
-  console.log(1);
 
   let temp = user.routes.get(route.type);
   console.log(temp);
