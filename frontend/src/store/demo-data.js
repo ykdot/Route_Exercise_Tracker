@@ -5,6 +5,14 @@ const demoData = () => {
         "_id": 1000,
         "type": "WALKING",
         "date": "2024-03-18T20:14:01",
+        "duration": "PT12M0.502S",
+        "calories": 89,
+        "distance": 1029,
+        "heart-rate": {
+            "average": 'REDACTED',
+            "maximum": 'REDACTED'
+        },
+        "detailed-sport-info": "WALKING",
         "points": [
             [
                 33.64724333,
@@ -2890,6 +2898,14 @@ const demoData = () => {
         "_id": 1001,
         "type": "WALKING",
         "date": "2024-03-18T20:00:05",
+        "duration": "PT3M42.627S",
+        "calories": 25,
+        "distance": 262,
+        "heart-rate": {
+            "average": 'REDACTED',
+            "maximum": 'REDACTED'
+        },
+        "detailed-sport-info": "WALKING",        
         "points": [
             [
                 33.64618833,
@@ -3785,6 +3801,14 @@ const demoData = () => {
         "_id": 1002,
         "type": "RUNNING",
         "date": "2024-03-18T19:52:32",
+        "duration": "PT6M59.753S",
+        "calories": 73,
+        "distance": 1061,
+        "heart-rate": {
+            "average": 'REDACTED',
+            "maximum": 'REDACTED'
+        },
+        "detailed-sport-info": "RUNNING",
         "points": [
             [
                 33.64881167,
@@ -5490,6 +5514,14 @@ const demoData = () => {
         "_id": 1003,
         "type": "RUNNING",
         "date": "2024-03-18T20:04:11",
+        "duration": "PT9M3.627S",
+        "calories": 104,
+        "distance": 1720,
+        "heart-rate": {
+            "average": 'REDACTED',
+            "maximum": 'REDACTED'
+        },
+        "detailed-sport-info": "RUNNING",
         "points": [
             [
                 33.64769667,
