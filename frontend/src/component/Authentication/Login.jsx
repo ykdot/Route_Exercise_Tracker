@@ -38,15 +38,9 @@ function Login() {
       }
       auth.login(responseData.userID, responseData.username, responseData.email, responseData.token); 
 
-      navigate(`/user-home`);
-      // if (location.state?.from) {
-      //   navigate(location.state.from);
-      // }
-      // redirect('/');
-      // console.log(auth.username);
-      // window.location.reload();      
+      navigate(`/user-home`);     
     } catch(err) {
-      setError(err.message || "Something went wrong!")
+      setError(err.message || "Something went wrong!");
     }
   }
 

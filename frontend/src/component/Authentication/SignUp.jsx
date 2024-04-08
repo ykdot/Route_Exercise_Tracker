@@ -19,28 +19,33 @@ function SignUp() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-
-    try {
-      const response = await fetch("http://localhost:5000/api/users/create",{
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: enteredNewUser.email,
-          username: enteredNewUser.username,
-          password: enteredNewUser.password
-        })        
-      });
-      const responseData = await response.json();
-      if (!response.ok) {
-        throw new Error(responseData.message);
-      }
-      auth.login(responseData.userID, responseData.username, responseData.email, responseData.token);
-      navigate('/user-home');
-      // window.location.reload(); 
-    } catch(err) {
-      setError(err.message || "Something went wrong");
+    if (enteredNewUser.password === enteredNewUser.rePassword) {
+      try {
+        const response = await fetch("http://localhost:5000/api/users/create",{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: enteredNewUser.email,
+            username: enteredNewUser.username,
+            password: enteredNewUser.password,
+            rePassword: enteredNewUser.rePassword
+          })        
+        });
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+        auth.login(responseData.userID, responseData.username, responseData.email, responseData.token);
+        navigate('/user-home');
+        // window.location.reload(); 
+      } catch(err) {
+        setError(err.message || "Something went wrong");
+      }      
+    }
+    else {
+      setError("Password does not match");
     }
   }
 
