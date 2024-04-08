@@ -18,7 +18,7 @@ function RTMap({routes}) {
         <FeatureGroup>
         </FeatureGroup>
         {(routes !== undefined && JSON.stringify(routes) !== '{}') && routes.map(route => (
-          <EnhancedPolyline key={route._id} positions={route.points} color="red"/>
+          <EnhancedPolyline key={route._id} positions={route.points} popup={route} color="red"/>
             ))}
       </MapContainer>
     </>

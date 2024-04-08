@@ -55,6 +55,7 @@ function SettingPage() {
           <div className={styles['inside-container']}>
             <h1>{auth.username}</h1>
             <p>Email: {auth.email}</p>
+            <p>Polar Flow Status: </p>
             <button className={styles['delete-button']} onClick={() => setDeleteLoad(true)}>Delete Account</button>
           </div>
         </div>        
