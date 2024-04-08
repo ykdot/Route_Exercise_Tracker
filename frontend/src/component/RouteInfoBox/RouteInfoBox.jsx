@@ -38,11 +38,11 @@ function RouteInfoBox({data, state}) {
       </button>
       <div className={styles[detailBox]}>
         <p>Type: {data.type}</p>
-        <p>Distance: {data.other.distance /1000} KM</p>
+        <p>Distance: {data.distance /1000} KM</p>
         <p>Time: {data.date}</p>
-        <p>Duration: {data.other.duration.slice(2)}</p>
+        <p>Duration: {data.duration.slice(2)}</p>
         <p>Heartbeat Data: </p>
-        <p>Calories: {data.other.calories}</p>
+        <p>Calories: {data.calories}</p>
         <button onClick={handleDelete}>Delete</button>
       </div>    
     </>

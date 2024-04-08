@@ -38,3 +38,10 @@ input {
   position: absolute;
   margin-top: 2rem;
 }
+
+.loading-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

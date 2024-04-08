@@ -20,9 +20,9 @@ function EnhancedPolyline({positions, color, popup}) {
             }}>
         <Popup>
           <h3>{popup.date}</h3>
-          <p>Length: {popup.other.distance / 1000} KM</p>
-          <p>Duration: {popup.other.duration.slice(2)}</p>
-          <p>Calories: {popup.other.calories} kcal</p>
+          <p>Length: {popup.distance / 1000} KM</p>
+          <p>Duration: {popup.duration.slice(2)}</p>
+          <p>Calories: {popup.calories} kcal</p>
         </Popup>
       </Polyline>
     </>
