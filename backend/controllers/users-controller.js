@@ -24,7 +24,7 @@ const login = async(req, res, next) => {
 
 
   if (!recognizedUser) {
-    const error = new HttpError('User does not exist', 401);
+    const error = new HttpError('Invalid username or password', 401);
     return next(error);
   }
 
@@ -32,7 +32,12 @@ const login = async(req, res, next) => {
   try {
     isValidPassword = await bcrypt.compare(password, recognizedUser.password);
   } catch(err) {
-    const error = new HttpError('Wrong Password', 401);
+    const error = new HttpError('Server Error', 500);
+    return next(error);
+  }
+
+  if (!isValidPassword) {
+    const error = new HttpError('Invalid username or password', 401);
     return next(error);
   }
 
@@ -66,7 +71,7 @@ const createUser = async(req, res, next) => {
     return next(new HttpError('Invalid inputs', 422));
   }
 
-  const { email, username, password } = req.body;
+  const { email, username, password, rePassword } = req.body;
 
 
   let existingEmail;
@@ -88,6 +93,16 @@ const createUser = async(req, res, next) => {
   if (existingUserName) {
     const error = new HttpError('This username is already in use.', 422);
     return next(error);
+  }
+
+  if (password.length < 7) {
+    const error = new HttpError('Password length needs to be at least 7 characters', 422);
+    return next(error);   
+  }
+
+  if (password !== rePassword) {
+    const error = new HttpError('Password needs to match', 422);
+    return next(error);       
   }
 
   // encrypt the password
