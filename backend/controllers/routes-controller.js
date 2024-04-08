@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
+// import {fileTypeFromStream} from 'file-type';
 
 const User = require('../models/user.js');
 const Route = require('../models/route.js');
 const HttpError = require('../models/http-error.js');
+const Helper = require('./helper.js');
 
 
 
@@ -50,7 +52,8 @@ const getRoute = async(req, res) => {
 }
 
 const manualAddRoute = async(req, res, next) => {
-  const {uid, file, distance, time, duration, calories} = req.body;
+  const {uid, file, type, distance, time, duration, calories} = req.body;
+
 
   let existingUser;
   try {
@@ -61,17 +64,61 @@ const manualAddRoute = async(req, res, next) => {
 
   // throw an error if userID does not point to any user
   if (!existingUser) {
-    return next(new HttpError("User doesn't exist", 500));
+    return next(new HttpError("User doesn't exist", 404));
   }
 
-  const newRoute = new Route({
-    
+  if (type.length < 3) {
+    return next(new HttpError("Type length is too short", 404));
+  }
+  let updatedType = type.toUpperCase();
+  console.log(updatedType);
+
+  const fileType = file.split('.').pop();
+
+  if (fileType !== 'GPX') {
+    return next(new HttpError("Wrong file type", 404));
+  }
+
+  const coord = Helper.getRoute(file);
+  console.log(coord);
+
+  const createdRoute = new Route({
+    user: uid,
+    method: "MANUAL",
+    type: updatedType,
+    distance: distance,
+    date: time,
+    duration: duration,
+    calories: calories,
+    points: coord,
   });
 
+  if (existingUser.routes.get(updatedType) === undefined) {
+    existingUser.routes.set(updatedType, []);
+  }
 
+  try {
+    // transaction and sessions
+    // makes sure everything is good before putting both in the database
+    // manually create collection for posts
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
 
+    await createdRoute.save( { session: sess });
 
+    existingUser.routes.get(updatedType).push(createdRoute._id);
+    await existingUser.save({ session: sess });
 
+    await sess.commitTransaction();
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError(
+      err, 500
+      //"Creation of route type Failed", 500
+    );
+    return error;
+  }
+  res.status(201).json({ newRoute: createdRoute }); 
 }
 
 const deleteRoute = async(req, res, next) => {
@@ -123,3 +170,5 @@ exports.getRoutePoints = getRoutePoints;
 exports.deleteRoute = deleteRoute;
 
 exports.getRoute = getRoute;
+
+exports.manualAddRoute = manualAddRoute;
