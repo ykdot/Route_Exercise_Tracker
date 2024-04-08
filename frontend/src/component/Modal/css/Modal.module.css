@@ -1,0 +1,33 @@
+.container {
+  position: fixed;
+  width: 35rem;
+  height: 35rem;
+  margin-left: -17.5rem;
+  margin-top: -17.5rem;
+  left: 50%;
+  top: 50%;
+  background-color: white;
+  border-radius: 1rem;
+}
+
+.container::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.left {
+  margin-left: 30rem;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.close-button {
+  border-radius: 2rem;
+  border: none;
+  padding: 1rem;
+}

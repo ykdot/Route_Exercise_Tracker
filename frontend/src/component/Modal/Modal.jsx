@@ -1,12 +1,19 @@
-import styles from './Modal.module.css';
+import { forwardRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import classes from './css/Modal.module.css';
 
-function Modal({children}) {
-
-  return (
-    <>
-      {children}
-    </>
+const Modal = forwardRef(function Modal({ children }, ref) {
+  return createPortal(
+    <dialog ref={ref} className={classes.container}>
+      <div className={classes.modal}>  
+        <form className={classes.left} method="dialog">
+          <button className={classes["close-button"]}>X</button>
+        </form>          
+        {children}
+      </div>
+    </dialog>
+    , document.getElementById('modal')
   );
-}
+});
 
 export default Modal;

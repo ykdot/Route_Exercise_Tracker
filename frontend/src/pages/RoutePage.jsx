@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import uuid from 'react-uuid';
 import { Circles } from "react-loader-spinner";
@@ -6,6 +6,8 @@ import { Helmet} from 'react-helmet';
 import RTMap from "../component/Map/RTMap";
 import RouteInfo from "../component/Map/RouteInfo";
 import RouteTrackerContext from "../store/route-tracker-contex";
+import Modal from "../component/Modal/Modal";
+import ManualAddForm from "../component/Modal/ManualAddForm";
 
 
 import styles from './css/RoutePage.module.css';
@@ -15,6 +17,13 @@ function RoutePage() {
   const [routeTypes, setRouteTypes] = useState();
   const [routeType, setRouteType] = useState();
   const [routeData, setRouteData] = useState(null);
+  const dialog = useRef();
+
+
+  
+  const handleShowManualForm = () => {
+    dialog.current.showModal();
+  } 
 
   const navigate = useNavigate();
   if (!auth.isLoggedIn) {
@@ -147,6 +156,9 @@ function RoutePage() {
   } 
   return (
     <>
+    <Modal ref={dialog}>
+      <ManualAddForm />
+    </Modal>
     <Helmet>
       <title>Route Page</title>
     </Helmet>
@@ -163,7 +175,6 @@ function RoutePage() {
             visible={true}
             />           
         </div>
-      
       }
       {
         routeData !== null && 
@@ -186,7 +197,7 @@ function RoutePage() {
 
                 {!auth.isPolarAuthenticated && <Link className={styles['auth-link']} to='https://flow.polar.com/oauth2/authorization?response_type=code&client_id=08ae0351-2e51-4723-a705-fbadd45aa5fc&redirect_uri=http://localhost:5173/user-routes'>Authentication</Link>}   
                 {auth.isPolarAuthenticated && <button className={styles['container-buttons']} onClick={getNewData}>Update via Polar</button>}
-                <button className={styles['container-buttons']}>Manual Add</button>     
+                <button className={styles['container-buttons']} onClick={handleShowManualForm}>Manual Add</button>     
               </div>
               <RTMap key={uuid()} routes={routeData}/>
           </div>
