@@ -24,7 +24,7 @@ function MapInfo({routeTypes, routeData}) {
         <RTMap key={uuid()} routes={routeData[routeType]}/>
       </div>
       
-      <RouteInfo className={styles['container-right']} data={routeData[routeType]}/>
+      <RouteInfo className={styles['container-right']} data={routeData[routeType]} state={false}/>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './RouteInfoBox.module.css';
 
-function RouteInfoBox({data}) {
+function RouteInfoBox({data, state}) {
   const [detailStatus, setDetailStatus] = useState(false);
 
   let detailBox;
@@ -14,16 +14,19 @@ function RouteInfoBox({data}) {
   }
 
   const handleDelete = async() => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/routes/delete-route/${data._id}`, 
-        {
-          method: 'DELETE',
-        });
-      await response.json();
-      window.location.reload();
-    }catch(err) {
-      throw Error(err);
+    if (state === true) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/routes/delete-route/${data._id}`, 
+          {
+            method: 'DELETE',
+          });
+        await response.json();
+        window.location.reload();
+      }catch(err) {
+        throw Error(err);
+      }      
     }
+
   };
 
   return (
@@ -35,9 +38,9 @@ function RouteInfoBox({data}) {
       </button>
       <div className={styles[detailBox]}>
         <p>Type: {data.type}</p>
-        <p>Distance: {data.other.distance} Meters</p>
+        <p>Distance: {data.other.distance /1000} KM</p>
         <p>Time: {data.date}</p>
-        <p>Duration: {data.other.duration}</p>
+        <p>Duration: {data.other.duration.slice(2)}</p>
         <p>Heartbeat Data: </p>
         <p>Calories: {data.other.calories}</p>
         <button onClick={handleDelete}>Delete</button>
