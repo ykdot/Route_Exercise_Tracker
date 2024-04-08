@@ -166,9 +166,9 @@
   }
 
   .first-left {
-    background-image: url('../../../public/title-map.png');
+    /* background-image: url('../../../public/title-map.png');
     background-repeat: no-repeat;
-    background-color: contain;
+    background-color: contain; */
     height: 28rem;
     width: 90vw;
   }

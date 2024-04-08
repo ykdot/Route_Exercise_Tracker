@@ -1,3 +1,4 @@
+import { Helmet} from 'react-helmet';
 import MapInfo from '../component/Map/MapInfo';
 import demoData from '../store/demo-data';
 
@@ -17,6 +18,9 @@ function DemoPage() {
 
   return (
     <div>
+      <Helmet>
+        <title>Demo Page</title>
+      </Helmet>
       <MapInfo routeTypes={data.keys} routeData={data.values}/>
     </div>
   );

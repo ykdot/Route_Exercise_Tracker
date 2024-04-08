@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import uuid from 'react-uuid';
 import { Circles } from "react-loader-spinner";
+import { Helmet} from 'react-helmet';
 import RTMap from "../component/Map/RTMap";
 import RouteInfo from "../component/Map/RouteInfo";
 import RouteTrackerContext from "../store/route-tracker-contex";
@@ -146,6 +147,9 @@ function RoutePage() {
   } 
   return (
     <>
+    <Helmet>
+      <title>Route Page</title>
+    </Helmet>
       {
         routeData === null && 
         <div className={styles['loading-image']}>

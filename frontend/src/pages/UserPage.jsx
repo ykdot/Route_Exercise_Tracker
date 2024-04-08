@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import uuid from 'react-uuid';
 import { Circles } from 'react-loader-spinner';
+import { Helmet} from 'react-helmet';
 import RouteTrackerContext from '../store/route-tracker-contex';
 import styles from './css/UserPage.module.css';
 
@@ -88,6 +89,9 @@ function UserPage() {
   
   return (
     <div className={styles.container}>
+      <Helmet>
+        <title>User Page</title>
+      </Helmet>
       <div className={styles['user-container']}>
         <h1>Welcome, {auth.username}</h1>
       </div>

@@ -1,3 +1,4 @@
+import { Helmet} from 'react-helmet';
 import Login from "../component/Authentication/Login";
 import SignUp from "../component/Authentication/SignUp";
 
@@ -16,6 +17,9 @@ function AuthenticationPage({version}) {
 
   return (
     <>
+    <Helmet>
+      <title>Authentication</title>
+    </Helmet>
       <div className={styles.container}>
         {authentication}
       </div>

@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Circles } from "react-loader-spinner";
+import { Helmet} from 'react-helmet';
 import RouteTrackerContext from '../store/route-tracker-contex';
 import styles from './css/SettingPage.module.css';
 
@@ -49,6 +50,9 @@ function SettingPage() {
 
   return (
     <>
+    <Helmet>
+      <title>Setting</title>
+    </Helmet>
       {
         deleteLoad === false &&
         <div className={styles.container}>

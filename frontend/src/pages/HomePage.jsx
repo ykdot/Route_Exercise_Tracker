@@ -1,9 +1,13 @@
+import { Helmet} from 'react-helmet';
 import { Link } from "react-router-dom";
 import styles from './css/HomePage.module.css';
 
 function HomePage() {
   return (
     <>
+    <Helmet>
+      <title>Home Page</title>
+    </Helmet>
       <div className={styles['info-container']}>
         <div className={styles['first-section']}>
           <div className={styles['first-left']}>
