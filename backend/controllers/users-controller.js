@@ -417,13 +417,13 @@ const getUserGeneralInfo = async(req, res, next) => {
       
       for (let i = 0; i < user.routes.get(type).length; i++) {
         let route = await Route.findById(user.routes.get(type)[i]);
-        distance += route.other.distance;
-        if (route.other.distance > longestDistance) {
-          longestDistance = route.other.distance;
+        distance += route.distance;
+        if (route.distance > longestDistance) {
+          longestDistance = route.distance;
           longestRoute = {
             id: user.routes.get(type)[i],
             date: route.date,
-            distance: route.other.distance
+            distance: route.distance
           };
         }
       }

@@ -52,8 +52,12 @@ const getRoute = async(req, res) => {
 }
 
 const manualAddRoute = async(req, res, next) => {
-  const {uid, file, type, distance, time, duration, calories} = req.body;
+  const {uid, type, distance, time, duration, calories} = req.body;
+  const file = req.file;
 
+  console.log(req.body);
+
+  res.status(201);
 
   let existingUser;
   try {
@@ -73,15 +77,15 @@ const manualAddRoute = async(req, res, next) => {
   let updatedType = type.toUpperCase();
   console.log(updatedType);
 
-  const fileType = file.split('.').pop();
+  const fileType = file.originalname.split('.').pop();
+  console.log(fileType);
 
   if (fileType !== 'GPX') {
     return next(new HttpError("Wrong file type", 404));
   }
 
-  const coord = Helper.getRoute(file);
-  console.log(coord);
-
+  const coord = await Helper.getRoute(file.path);
+  
   const createdRoute = new Route({
     user: uid,
     method: "MANUAL",
