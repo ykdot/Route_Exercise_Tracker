@@ -20,33 +20,26 @@ function ManualAddForm() {
 
   const handleSubmit = async(event) => {
     event.preventDefault();
-    console.log(enteredData.type);
+    const formData = new FormData();
+    formData.append('uid', auth.userID);
+    formData.append('file', enteredData.file);
+    formData.append('type', enteredData.type);
+    formData.append('distance', enteredData.distance);
+    formData.append('time', enteredData.time);
+    formData.append('duration', enteredData.duration);
+    formData.append('calories', enteredData.calories);
+    console.log(formData);
     try {
       setIsLoading(true);
       const response = await fetch('http://localhost:5000/api/routes/manual-add-route', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          uid: auth.userID,
-          file: enteredData.file,
-          type: enteredData.type,
-          distance: enteredData.distance,
-          time: enteredData.time,
-          duration: enteredData.duration,
-          calories: enteredData.calories,
-        })        
+        body: formData     
       });
 
       const responseData = await response.json();
       if (!response.ok) {
         throw new Error(responseData.message);
       }
-      console.log(responseData);      
-
-
-      setIsLoading(false);
       window.location.reload(); 
     }catch(err) {
       setError(err.message || "Something went wrong");
@@ -55,10 +48,11 @@ function ManualAddForm() {
   };
 
   function handleChangeFile(event) {
-    console
+    // const formData = new FormData();
+    // formData.append("files", event.target.value);
     setEnteredData((prevValue) => ({
       ...prevValue,
-      file: event.target.value
+      file: event.target.files[0]
     }));
   }
 
@@ -99,27 +93,26 @@ function ManualAddForm() {
       calories: event.target.value
     }));
   }
-  console.log(enteredData.file.split('.').pop());
   
-  const submitStatus = (enteredData.file !== "" && enteredData.type !== "")? "eligible-button" : "disabled" ;
+  const submitStatus = (enteredData.file !== "" && enteredData.type !== "" && enteredData.distance !== "")? "eligible-button" : "disabled" ;
   return (
     <>
       {!isLoading &&
-        <form onSubmit={handleSubmit} className={styles.container}>
+        <form onSubmit={handleSubmit} className={styles.container} encType="multipart/form-data">
           <h1>Add a Route</h1>
           {error != '' && <p className={styles['error-message']}>{error}</p>}
           <label htmlFor="">GPX File:</label>
-          <input type="file" accept=".gpx" onChange={handleChangeFile}/>  
+          <input type="file" name="file" accept=".gpx" onChange={handleChangeFile}/>  
           <label htmlFor="">Route Type: </label>
           <input type="text" value={enteredData.type} onChange={handleChangeType} placeholder=''/>    
           <label htmlFor="">Distance: </label>
-          <input type="text" value={enteredData.distance} onChange={handleChangeDistance} placeholder=''/>
+          <input type="number" value={enteredData.distance} onChange={handleChangeDistance} placeholder=''/>
           <label htmlFor="">Time: </label>
           <input type="text" value={enteredData.time} onChange={handleChangeTime} placeholder=''/>
           <label htmlFor="">Duration: </label>
           <input type="text" value={enteredData.duration} onChange={handleChangeDuration} placeholder=''/>
           <label htmlFor="">Calories: </label>
-          <input type="text" value={enteredData.calories} onChange={handleChangeCalories} placeholder=''/>
+          <input type="number" value={enteredData.calories} onChange={handleChangeCalories} placeholder=''/>
           
           <input className={`${styles["submit-button"]} ${styles[submitStatus]}`} type="submit" value="Add Route" />
         </form>      
