@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// import {fileTypeFromStream} from 'file-type';
+const fs = require('fs');
 
 const User = require('../models/user.js');
 const Route = require('../models/route.js');
@@ -122,6 +122,12 @@ const manualAddRoute = async(req, res, next) => {
     );
     return error;
   }
+
+  fs.unlink(file.path, (err) => {
+    if (err) {
+      console.error(err);
+    }
+  });    
   res.status(201).json({ newRoute: createdRoute }); 
 }
 
