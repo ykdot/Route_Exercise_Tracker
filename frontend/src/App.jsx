@@ -42,18 +42,20 @@ function App() {
 
   const [apiToken, setApiToken] = useState(false);
   const [apiID, setApiID] = useState(null);
+  const [isPolarAffiliated, setIsPolarAffiliated] = useState(null);
   const [isPolarAuthenticated, setIsPolarAuthenticated] = useState(false);
 
-  const login = useCallback((uid, username, email, token, expirationDate ) => {
+  const login = useCallback((uid, username, email, polarAffiliated, token, expirationDate ) => {
     setToken(token);
     setUsername(username);
     setEmail(email);
     setUserID(uid);
+    setIsPolarAffiliated(polarAffiliated);
     const tokenClock = expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
     setTokenExpirationDate(tokenClock);
     localStorage.setItem(
       'userData', 
-      JSON.stringify({ userID: uid, username: username, email: email, token: token, expiration: tokenClock.toISOString() }));
+      JSON.stringify({ userID: uid, username: username, email: email, polarAffiliated: polarAffiliated, token: token, expiration: tokenClock.toISOString() }));
   }, []);
 
   const logout = useCallback(() => {
@@ -64,6 +66,7 @@ function App() {
     setTokenExpirationDate(null);
     setApiToken(null);
     setApiID(null);
+    setIsPolarAffiliated(null);
     setIsPolarAuthenticated(false);
     // all local storage clear; too generaltho
     localStorage.clear();
@@ -106,6 +109,7 @@ function App() {
         login: login,
         logout: logout,
         apiToken: apiToken,
+        isPolarAffiliated: isPolarAffiliated,
         isPolarAuthenticated: isPolarAuthenticated,
         apiID: apiID,
         apiLogin: apiLogin     

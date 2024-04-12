@@ -37,7 +37,7 @@ function SignUp() {
         if (!response.ok) {
           throw new Error(responseData.message);
         }
-        auth.login(responseData.userID, responseData.username, responseData.email, responseData.token);
+        auth.login(responseData.userID, responseData.username, responseData.email, responseData.polarAffiliated, responseData.token);
         navigate('/user-home');
         // window.location.reload(); 
       } catch(err) {
