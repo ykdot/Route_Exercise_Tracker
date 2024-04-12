@@ -9,6 +9,7 @@ const userSchema = new Schema({
   password: { type: String, required: true, minlength: 6}, 
   routes: { type: Map, of: Array, default: () => ({}), ref: 'Route'},
   polarID: { type: Number, default: 0},
+  polarAffiliated: { type: Boolean, default: false}
 });
 
 // make sure we have a unique email, query email as fast as possible, mke sure user can be created only with unique names

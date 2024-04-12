@@ -7,7 +7,6 @@ const HttpError = require('../models/http-error.js');
 const Helper = require('./helper.js');
 
 
-
 const getRoutePoints = async(req, res, next) => {
   const uid = req.params.uid;
   const routeType = req.params.routeType;
@@ -54,10 +53,6 @@ const getRoute = async(req, res) => {
 const manualAddRoute = async(req, res, next) => {
   const {uid, type, distance, time, duration, calories} = req.body;
   const file = req.file;
-
-  console.log(req.body);
-
-  res.status(201);
 
   let existingUser;
   try {
@@ -132,10 +127,7 @@ const manualAddRoute = async(req, res, next) => {
 }
 
 const deleteRoute = async(req, res, next) => {
-  const uid = req.params.uid;
   const rid = req.params.rid;  
-
-  console.log()
   let route;
   let user;
   try {
@@ -148,11 +140,6 @@ const deleteRoute = async(req, res, next) => {
   if (!route) {
     throw new HttpError('Route does not exist', 401);
   }
-
-  let temp = user.routes.get(route.type);
-  console.log(temp);
-  temp.pull(rid);
-
 
   try {
     const sess = await mongoose.startSession();
@@ -178,7 +165,5 @@ const deleteRoute = async(req, res, next) => {
 
 exports.getRoutePoints = getRoutePoints;
 exports.deleteRoute = deleteRoute;
-
 exports.getRoute = getRoute;
-
 exports.manualAddRoute = manualAddRoute;
