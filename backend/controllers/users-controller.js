@@ -306,9 +306,8 @@ const getNewData = async(req, res, next) => {
 
     // proper user check needed later 
     const responseData = await data.json();
-    console.log(responseData); 
-
     transactionID = responseData["transaction-id"];
+    // console.log(responseData); 
 
     // provides the list of exercises that is included in the transaction 
     const data2 = await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}/exercise-transactions/${transactionID}`, 
@@ -323,9 +322,9 @@ const getNewData = async(req, res, next) => {
     // proper user check needed later 
     const responseData2 = await data2.json();
     console.log(responseData2.exercises); 
-    list = responseData2.exercises;
+    list = responseData2.exercises;  
   }catch(err) {
-    throw new Error(err);
+    return next(err);
   } 
   const status = await Helper.filterExercise(uid, list, token);
   if (status.code !== 201) {
