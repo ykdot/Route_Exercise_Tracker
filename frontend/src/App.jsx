@@ -94,8 +94,12 @@ function App() {
   // auto-login when refreshing page
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem('userData'));
+    const apiData = JSON.parse(localStorage.getItem('apiToken'));
     if (storedData && storedData.token && new Date(storedData.expiration) > new Date()) {
       login(storedData.userID, storedData.username, storedData.email, storedData.token, new Date(storedData.expiration));
+      if (apiData !== null) {
+        apiLogin(apiData.token, apiData.apiID);
+      }
     }
   }, [login]); 
   return (
