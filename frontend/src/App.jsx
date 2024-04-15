@@ -46,6 +46,7 @@ function App() {
   const [isPolarAuthenticated, setIsPolarAuthenticated] = useState(false);
 
   const login = useCallback((uid, username, email, polarAffiliated, token, expirationDate ) => {
+    console.log(polarAffiliated);
     setToken(token);
     setUsername(username);
     setEmail(email);

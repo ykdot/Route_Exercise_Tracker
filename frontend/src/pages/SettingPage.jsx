@@ -75,6 +75,7 @@ function SettingPage() {
       throw new Error(err);
     }
   }
+  const polarConnection = auth.isPolarAffiliated ? 'Connected': 'No Connection';
 
   return (
     <>
@@ -87,7 +88,7 @@ function SettingPage() {
           <div className={styles['inside-container']}>
             <h1>{auth.username}</h1>
             <p>Email: {auth.email}</p>
-            <p>Polar Flow Status: </p>
+            <p>Polar Flow Status: {polarConnection}</p>
             <button className={styles['delete-button']} onClick={handleDeleteAccount}>Delete Account</button>
           </div>
         </div>        
