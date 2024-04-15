@@ -11,38 +11,69 @@ function SettingPage() {
 
   const [deleteLoad, setDeleteLoad] = useState(false);
 
-  if (deleteLoad === true) {
-    const handleDeleteAccount = async() => {
-      // prompt to ask user; model implementation in future
+  // if (deleteLoad === true) {
+  //   const handleDeleteAccount = async() => {
+  //     // prompt to ask user; model implementation in future
 
-      const userID = JSON.parse(localStorage.getItem('userData')).userID;
-      let apiID = "1";
-      let token = "1";
-      if (JSON.parse(localStorage.getItem('userData')).polarAffiliated) {
-        apiID = JSON.parse(localStorage.getItem('apiToken')).apiID;
-        token = JSON.parse(localStorage.getItem('apiToken')).token;
-      }
-      console.log("tes");
-      // if polar authenticated, go ahead and delete or if no polar connection, go ahead and delete
-      try {
-        const response = await fetch(`http://localhost:5000/api/users/delete-account/${userID}/${apiID}/${token}`, 
-          {
-            method: 'DELETE',
-            // headers: {
-            //   'Authorization': `Bearer ${auth.token}` ,
-            // },
-          });
+  //     const userID = JSON.parse(localStorage.getItem('userData')).userID;
+  //     let apiID = "1";
+  //     let token = "1";
+  //     if (JSON.parse(localStorage.getItem('userData')).polarAffiliated) {
+  //       apiID = JSON.parse(localStorage.getItem('apiToken')).apiID;
+  //       token = JSON.parse(localStorage.getItem('apiToken')).token;
+  //     }
+  //     console.log("tes");
+  //     // if polar authenticated, go ahead and delete or if no polar connection, go ahead and delete
+  //     try {
+  //       const response = await fetch(`http://localhost:5000/api/users/delete-account/${userID}/${apiID}/${token}`, 
+  //         {
+  //           method: 'DELETE',
+  //           // headers: {
+  //           //   'Authorization': `Bearer ${auth.token}` ,
+  //           // },
+  //         });
         
-        await response.json();
-        auth.logout();
-        localStorage.clear();
-        console.log("This should be the time to redirect");
-        navigate('/');
-      }catch(err) {
-        throw new Error(err);
-      }
+  //       await response.json();
+  //       auth.logout();
+  //       localStorage.clear();
+  //       console.log("This should be the time to redirect");
+  //       navigate('/');
+  //     }catch(err) {
+  //       throw new Error(err);
+  //     }
+  //   }
+  //   handleDeleteAccount();
+  // }
+
+  const handleDeleteAccount = async() => {
+    // prompt to ask user; model implementation in future
+    setDeleteLoad(true);
+    const userID = JSON.parse(localStorage.getItem('userData')).userID;
+    let apiID = "1";
+    let token = "1";
+    if (JSON.parse(localStorage.getItem('userData')).polarAffiliated) {
+      apiID = JSON.parse(localStorage.getItem('apiToken')).apiID;
+      token = JSON.parse(localStorage.getItem('apiToken')).token;
     }
-    handleDeleteAccount();
+    console.log("tes");
+    // if polar authenticated, go ahead and delete or if no polar connection, go ahead and delete
+    try {
+      const response = await fetch(`http://localhost:5000/api/users/delete-account/${userID}/${apiID}/${token}`, 
+        {
+          method: 'DELETE',
+          // headers: {
+          //   'Authorization': `Bearer ${auth.token}` ,
+          // },
+        });
+      
+      await response.json();
+      auth.logout();
+      localStorage.clear();
+      console.log("This should be the time to redirect");
+      navigate('/');
+    }catch(err) {
+      throw new Error(err);
+    }
   }
 
   return (
@@ -57,7 +88,7 @@ function SettingPage() {
             <h1>{auth.username}</h1>
             <p>Email: {auth.email}</p>
             <p>Polar Flow Status: </p>
-            <button className={styles['delete-button']} onClick={() => setDeleteLoad(true)}>Delete Account</button>
+            <button className={styles['delete-button']} onClick={handleDeleteAccount}>Delete Account</button>
           </div>
         </div>        
       }
