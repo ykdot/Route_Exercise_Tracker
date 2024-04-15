@@ -48,3 +48,13 @@
 .container-right {
   width: 20%;
 }
+
+@media (max-width: 600px) {
+  .map-info {
+    flex-direction: column;
+  }
+  .container-map {
+    width: 100vw;
+    height: 50vh;
+  }
+}

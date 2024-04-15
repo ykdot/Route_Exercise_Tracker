@@ -61,3 +61,13 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+@media (max-width: 600px) {
+  .map-info {
+    flex-direction: column;
+  }
+  .container-map {
+    width: 100vw;
+    height: 50vh;
+  }
+}

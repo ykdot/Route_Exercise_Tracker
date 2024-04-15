@@ -5,3 +5,10 @@
   background: white;
   height: calc(100% - 10rem);
 }
+
+@media (max-width: 600px) {
+  .container {
+    background-color: rgb(216, 237, 255);
+    height: calc(100vh - 5rem - 3rem);
+  }
+}
