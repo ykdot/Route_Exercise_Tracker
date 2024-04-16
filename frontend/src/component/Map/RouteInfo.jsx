@@ -3,6 +3,7 @@ import uuid from 'react-uuid';
 
 import styles from './css/RouteInfo.module.css';
 
+// this component shows the list of routes on the right side of the route/demo page
 function RouteInfo({data, state}) {
   return (
     <div className={styles.container}>
@@ -14,7 +15,6 @@ function RouteInfo({data, state}) {
           <RouteInfoBox key={uuid()} data={data} state={state}/>
             ))}          
       </div>
-    
     </div>
   );
 }

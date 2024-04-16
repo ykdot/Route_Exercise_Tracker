@@ -39,6 +39,8 @@
   width: 20vw;
   line-height: 4rem;
   border: 1px solid;
+  background-color: azure;
+  color: black;
 }
 
 .auth-link:hover {
@@ -47,8 +49,12 @@
 }
 
 .container-buttons {
-  width: 20vw;
-  border-radius: 0;
+  width: 40vw;
+  border-style: solid;
+  border-color: black;
+  border-width: 0.1rem;
+  background-color: greenyellow;
+  color: black;
 }
 
 .container-right {

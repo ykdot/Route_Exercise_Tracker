@@ -4,6 +4,7 @@ import RTMap from "./RTMap";
 import RouteInfo from "./RouteInfo";
 import styles from './css/MapInfo.module.css';
 
+// this map component is for the demo page
 function MapInfo({routeTypes, routeData}) {
   const [routeType, setRouteType] = useState(routeTypes[0]);
   console.log(routeData[routeType]);
@@ -17,7 +18,7 @@ function MapInfo({routeTypes, routeData}) {
               : <option key={uuid()}>{type} </option>
             ))}
           </select>  
-          <button>Polar Authenticate</button>
+          <button className={styles['auth-button']}>Polar Authenticate</button>
           <button className={styles['container-button']}>Update via Polar</button>
           <button className={styles['container-button']}>Manual Add</button>     
         </div>

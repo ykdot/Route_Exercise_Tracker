@@ -1,5 +1,4 @@
-
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './AuthenticationBox.module.css';
 import { useContext, useState } from 'react';
 import RouteTrackerContext from '../../store/route-tracker-contex';
@@ -13,8 +12,6 @@ function Login() {
   });
 
   const navigate = useNavigate();
-  const location = useLocation();
-
 
   const [error, setError] = useState('');
 
@@ -58,7 +55,7 @@ function Login() {
     }));
   }  
 
-  const submitStatus = (enteredAuthData.username != "" && enteredAuthData.password != "") ? "eligible-button": "disabled"; 
+  // const submitStatus = (enteredAuthData.username != "" && enteredAuthData.password != "") ? "eligible-button": "disabled"; 
 
   return (
     <form onSubmit={handleSubmit} className={styles['auth-box']}>

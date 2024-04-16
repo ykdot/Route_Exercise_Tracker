@@ -39,10 +39,23 @@
   border: 0;
 }
 
-.container-buttons {
-  width: 40vw;
-  border-radius: 0;
-  border: 1px;
+.auth-button {
+  background-color: azure;
+  color: black;
+}
+
+.container-button {
+  width: 30vw;
+  border-style: solid;
+  border-color: black;
+  border-width: 0.1rem;
+  background-color: greenyellow;
+  color: black;
+}
+
+.container-button:hover {
+  cursor: pointer;
+  background-color: green;
 }
 
 .container-right {

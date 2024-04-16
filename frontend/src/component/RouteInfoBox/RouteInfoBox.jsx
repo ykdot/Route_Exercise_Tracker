@@ -26,7 +26,6 @@ function RouteInfoBox({data, state}) {
         throw Error(err);
       }      
     }
-
   };
 
   return (
@@ -43,10 +42,9 @@ function RouteInfoBox({data, state}) {
         <p>Duration: {data.duration.slice(2)}</p>
         <p>Heartbeat Data: </p>
         <p>Calories: {data.calories}</p>
-        <button onClick={handleDelete}>Delete</button>
+        <button onClick={handleDelete} className={styles['delete-button']}>Delete</button>
       </div>    
     </>
-
   );
 }
 

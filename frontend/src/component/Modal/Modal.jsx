@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef } from 'react';
 import { createPortal } from 'react-dom';
 import classes from './css/Modal.module.css';
 

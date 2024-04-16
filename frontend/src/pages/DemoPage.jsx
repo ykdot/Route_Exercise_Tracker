@@ -3,8 +3,6 @@ import MapInfo from '../component/Map/MapInfo';
 import demoData from '../store/demo-data';
 
 function DemoPage() {
-  // https://evernote.com/
-
   const data =
   {
     "keys": [

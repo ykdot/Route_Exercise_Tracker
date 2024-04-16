@@ -8,8 +8,6 @@ import RouteInfo from "../component/Map/RouteInfo";
 import RouteTrackerContext from "../store/route-tracker-contex";
 import Modal from "../component/Modal/Modal";
 import ManualAddForm from "../component/Modal/ManualAddForm";
-
-
 import styles from './css/RoutePage.module.css';
 
 function RoutePage() {
@@ -18,8 +16,7 @@ function RoutePage() {
   const [routeType, setRouteType] = useState();
   const [routeData, setRouteData] = useState(null);
   const dialog = useRef();
-
-
+  
   
   const handleShowManualForm = () => {
     dialog.current.showModal();
@@ -205,9 +202,7 @@ function RoutePage() {
           {routeTypes !== undefined && <RouteInfo className={styles['container-right']} data={routeData}/>}
         </div>        
       }
-
     </>
-
   );
 }
 

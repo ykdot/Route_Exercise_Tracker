@@ -1,5 +1,7 @@
 .button-container {
   width: 100%;
+  background-color: rgb(28, 120, 196);
+  color: white;
 }
 
 .container {
@@ -8,4 +10,17 @@
 
 .hidden {
   display: none;
+}
+
+.delete-button {
+  background-color: red;
+  color: white;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  border-style: solid;
+}
+
+.delete-button:hover {
+  background-color: rgb(192, 0, 0);
+  cursor: pointer;
 }

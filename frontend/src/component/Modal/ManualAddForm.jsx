@@ -48,8 +48,6 @@ function ManualAddForm() {
   };
 
   function handleChangeFile(event) {
-    // const formData = new FormData();
-    // formData.append("files", event.target.value);
     setEnteredData((prevValue) => ({
       ...prevValue,
       file: event.target.files[0]
@@ -132,7 +130,6 @@ function ManualAddForm() {
       </div>
       }
     </>
-
   );
 }
 export default ManualAddForm;

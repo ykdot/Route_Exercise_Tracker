@@ -7,10 +7,8 @@ import RouteTrackerContext from '../store/route-tracker-contex';
 import styles from './css/UserPage.module.css';
 
 function UserPage() {
-
   const auth = useContext(RouteTrackerContext);
   const [userInfo, setUserInfo] = useState(null);
-
   const url = window.location.href;
 
   const authenticatePolarUser = async () => {
@@ -116,7 +114,6 @@ function UserPage() {
 
       {
         userInfo !== null &&
-        
         <>
           {
             userInfo.info.length === 0 &&
@@ -138,7 +135,6 @@ function UserPage() {
           }
         </>
       }
-      
     </div>
   );
 }
