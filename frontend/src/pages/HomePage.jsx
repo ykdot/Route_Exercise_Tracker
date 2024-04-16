@@ -12,7 +12,7 @@ function HomePage() {
         <div className={styles['first-section']}>
           <div className={styles['first-left']}>
             <h1>Track Routes and Pathes</h1>
-            <p className={styles['first-desc']}>With Route Tracker, you can track all running, walking, hiking routes and pathes by 
+            <p className={styles['first-desc']}>With Route Exercise Tracker, you can track all running, walking, hiking routes and pathes by 
               visualizing each route on a map.
             </p>  
             <Link to='/signup' className={styles['first-link']}>Start Tracking Routes Today!</Link>

@@ -25,7 +25,7 @@ function Navbar() {
 
   return (
     <nav className={classes['main-nav']}>
-      <h1 className={classes.title}>Route Tracker</h1>
+      <h1 className={classes.title}>Route Exercise Tracker</h1>
 
       <button className={classes['link-icon']} onClick={() => setMobileList(!mobileList)}>
         <img className={classes.icon} src="/hamburger-icon.svg" alt="Hamburger Icon" />
