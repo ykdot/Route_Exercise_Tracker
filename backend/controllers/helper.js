@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const DOMParser = require('xmldom').DOMParser;
 const tj = require('@mapbox/togeojson');
 const fs = require('fs');
-
 const User = require('../models/user.js');
 const Route = require('../models/route.js');
 const HttpError = require('../models/http-error.js');
@@ -96,11 +95,11 @@ const createRoute = async(uid, route, coord) => {
   try {
     user = await User.findById(uid);
   } catch(err) {
-    return new HttpError('request error', 404);   
+    throw new HttpError('request error', 404);   
   }
 
   if (!user) {
-    return new HttpError('could not find user', 500);   
+    throw new HttpError('could not find user', 500);   
   }
 
   // create new route
@@ -142,7 +141,7 @@ const createRoute = async(uid, route, coord) => {
       err, 500
       //"Creation of route type Failed", 500
     );
-    return error;
+    throw error;
   }
 
   // temporary languuge for now

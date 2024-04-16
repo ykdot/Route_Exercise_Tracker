@@ -3,8 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const Helper = require('./helper.js');
-
-
 const User = require('../models/user.js');
 const Route = require('../models/route.js');
 const HttpError = require('../models/http-error.js');
@@ -64,8 +62,6 @@ const login = async(req, res, next) => {
 }
 
 const createUser = async(req, res, next) => {
-
-  // password length is not checked here but at the last try block which is wrong functionality
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(new HttpError('Invalid inputs', 422));
@@ -155,7 +151,6 @@ const createUser = async(req, res, next) => {
   });
 }
 
-// check to see if polar ID matches
 const connectToPolarAPI = async(req, res, next) => {
   // code === authentication code from Polar
   const code = req.body.code;
@@ -190,13 +185,11 @@ const connectToPolarAPI = async(req, res, next) => {
     console.log(accessToken);
     // get / check the apiID to make sure the id connects with the user
   }catch(err) {
-    throw new Error(err);
+    return next(new Error(err));
   }
-  console.log(accessToken);
+
 
   // check to see if account is affiliated with account
-
-
   // get user information
   try {
     let userAuthorization = 'Bearer ' + accessToken;
@@ -205,10 +198,10 @@ const connectToPolarAPI = async(req, res, next) => {
     try {
       user = await User.findById(uid);
     }catch(err) {
-      throw new Error(err);
+      return next(new Error(err));
     }
     if (!user) {
-      throw new HttpError('User does not exist', 404);
+      return next(new HttpError('User does not exist', 404));
     }
     console.log("user polar id is " + user.polarID);
 
@@ -226,8 +219,6 @@ const connectToPolarAPI = async(req, res, next) => {
         }) 
       }); 
       const responseData = await data.json();
-      console.log(responseData);
-
       apiID = responseData['polar-user-id'];      
       try {
         const sess = await mongoose.startSession();
@@ -237,63 +228,41 @@ const connectToPolarAPI = async(req, res, next) => {
         await user.save({ session: sess });
         await sess.commitTransaction();
       }catch(err) {
-        throw new HttpError(err, 500);
+        return next(new HttpError(err, 500));
       }
     }
     else {
       apiID = user.polarID;
     }
-
-    console.log(apiID);
-
-    // console.log(responseData);
-    const data2 = await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}`, 
-    {
-      method: 'GET',
-      headers: {
-        'Authorization': userAuthorization,
-        'Accept': 'application/json'
-      }
-    }); 
-
-    // proper user check needed later 
-    const responseData2 = await data2.text();
-    console.log(responseData2);  
   }catch(err) {
-    throw new Error(err);
+    return next(new Error(err));
   } 
  
   res.status(201).json({ apiID: apiID, token: accessToken });
 }
 
-// transaction shelf life is 10 minutes; potentially no other transaction being able to be created in that timeframe
 const getNewData = async(req, res, next) => {
   const token = req.body.token;
   const uid = req.body.uid;
-  // i might have to include sending the polar id, other user information later
+
+
   // const api_auth = 'Basic ' + btoa(basic_auth);
   const userAuthorization = 'Bearer ' + token;
   let user;
   try {
     user = await User.findById(uid);
   }catch(err) {
-    throw new HttpError('Server Error', 500);
+    return next(new HttpError('Server Error', 500));
   }
 
   if (!user) {
-    throw new HttpError("User does not exist", 404);
+    return next(new HttpError("User does not exist", 404));
   }
   const apiID = user.polarID;
 
-  // console.log(token);
   let transactionID;
   let list;
   try {
-    // apiID should not be hard coded later
-    
-    console.log(apiID);
-    console.log(token);
-
     // get exercise transaction id to start working with data
     const data = await fetch(`https://www.polaraccesslink.com/v3/users/${apiID}/exercise-transactions`, 
     {
@@ -304,7 +273,7 @@ const getNewData = async(req, res, next) => {
       }
     });
 
-    // proper user check needed later 
+    // transaction shelf life is 10 minutes; potentially no other transaction being able to be created in that timeframe
     const responseData = await data.json();
     transactionID = responseData["transaction-id"];
     // console.log(responseData); 
@@ -341,11 +310,11 @@ const getUserRoutes = async(req, res, next) => {
   try {
     user = await User.findById(userID);
   }catch(err) {
-    throw new HttpError('Server error', 500);
+    return next(new HttpError('Server error', 500));
   }
 
   if (!user) {
-    throw new HttpError('Server error', 401);
+    return next(new HttpError('Server error', 401));
   }
 
   let routeTypeList = [];
@@ -366,11 +335,11 @@ const getAllUserRoutes = async(req, res, next) => {
   try {
     user = await User.findById(userID);
   }catch(err) {
-    throw new HttpError('Server error', 500);
+    return next(new HttpError('Server error', 500));
   }
 
   if (!user) {
-    throw new HttpError('Server error', 401);
+    return next(new HttpError('Server error', 401));
   }
 
   let keys = [];
@@ -385,7 +354,6 @@ const getAllUserRoutes = async(req, res, next) => {
   res.status(200).json({ keys: keys, values: user.routes });
 }
 
-// temp solution
 const getUserGeneralInfo = async(req, res, next) => {
   const userID = req.params.uid;
 
@@ -393,11 +361,11 @@ const getUserGeneralInfo = async(req, res, next) => {
   try {
     user = await User.findById(userID);
   }catch(err) {
-    throw new HttpError('Server error', 500);
+    return next(new HttpError('Server error', 500));
   }
 
   if (!user) {
-    throw new HttpError('Server error', 401);
+    return next(new HttpError('Server error', 401));
   }
 
   const userInfo = [];
@@ -430,7 +398,7 @@ const getUserGeneralInfo = async(req, res, next) => {
       
       userInfo.push(typeInfo);
     }catch(err) {
-      throw new HttpError(err, 401);
+      return next(new HttpError(err, 401));
     }
     type = iterator.next().value;
   }
@@ -442,7 +410,6 @@ const deleteAccount = async(req, res, next) => {
   const apiID = req.params.apiID;
   const userAuthorization = 'Bearer ' + req.params.token;
 
-
   let user;
   let routes;
   try {
@@ -450,11 +417,11 @@ const deleteAccount = async(req, res, next) => {
     routes = await Route.find({user: uid});
 
   }catch(err) {
-    throw new HttpError('Server error', 500);
+    return next(new HttpError('Server error', 500));
   }
 
   if (!user) {
-    throw new HttpError('user does not exist', 401);
+    return next(new HttpError('user does not exist', 401));
   }
 
   if (user.polarID !== 0) {
@@ -467,19 +434,12 @@ const deleteAccount = async(req, res, next) => {
           'Authorization': userAuthorization
         },
       });
-
-
       await response();
 
     }catch(err) {
-      throw new HttpError(err, 500);
+      return next(new HttpError(err, 500));
     }    
   }
-  // delete routes from routes
-  // delete routes from routeType
-  // delete user from db
-
-
 
   try {
     const sess = await mongoose.startSession();
@@ -492,14 +452,10 @@ const deleteAccount = async(req, res, next) => {
       await routes[i].deleteOne({session:sess});
     }
 
-    console.log("test");
     await user.deleteOne({ session: sess});
-
-    console.log("test2");
-
     await sess.commitTransaction();
   }catch(err) {
-    throw new HttpError(err, 500);   
+    return next(new HttpError(err, 500));   
   }
 
   res.status(202).json({ message: "Successfully deleted account" });

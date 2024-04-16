@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 
 
 // middleware
-app.use('/api/users', usersRoutes);  // middleware
+app.use('/api/users', usersRoutes);
 app.use('/api/routes', routesRoutes);
 
 // cases when there is a request where there is no request before
@@ -36,7 +36,7 @@ app.use((error, req, res, next) => {
     return next(error);
   }
 
-  // there is an erro sent but res is unknown, so error is unknown but there is an error
+  // there is an error sent but res is unknown, so error is unknown but there is an error
   res.status(error.code || 500);
   res.json({message: error.message || 'unknown error'});
 });
@@ -44,8 +44,8 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(url)
   .then(() => {
-    console.log("you are connected");
-    app.listen(5000); // run server
+    console.log("Connected");
+    app.listen(5000);
   })
   .catch(error => {
     console.log(error);

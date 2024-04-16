@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
-
 const User = require('../models/user.js');
 const Route = require('../models/route.js');
 const HttpError = require('../models/http-error.js');
@@ -15,11 +14,11 @@ const getRoutePoints = async(req, res, next) => {
   try {
     user = await User.findById(uid);
   }catch(err) {
-    throw new HttpError('Server error', 500);
+    return next(new HttpError('Server error', 500));
   }
 
   if (!user) {
-    throw new HttpError('Server error', 401);
+    return next(new HttpError('Server error', 401));
   }
 
   let routeList = [];
@@ -30,7 +29,7 @@ const getRoutePoints = async(req, res, next) => {
       let route = await Route.findById(fetchedRoutes[i]);
       routeList.push(route);
     }catch(err) {
-      throw new HttpError("error", 404);
+      return next(new HttpError("error", 404));
     }
   }
   res.status(200).json({ list: routeList });
@@ -38,13 +37,12 @@ const getRoutePoints = async(req, res, next) => {
 
 const getRoute = async(req, res) => {
   const rid = req.params.rid;
-
   let route;
 
   try {
     route = await Route.findById(rid);
   }catch(err) {
-    throw new HttpError("Server error", 500);
+    return next(new HttpError("Server error", 500));
   }
 
   res.json({route: route});
@@ -70,10 +68,8 @@ const manualAddRoute = async(req, res, next) => {
     return next(new HttpError("Type length is too short", 404));
   }
   let updatedType = type.toUpperCase();
-  console.log(updatedType);
 
   const fileType = file.originalname.split('.').pop();
-  console.log(fileType);
 
   if (fileType !== 'GPX') {
     return next(new HttpError("Wrong file type", 404));
@@ -113,7 +109,6 @@ const manualAddRoute = async(req, res, next) => {
     console.log(err);
     const error = new HttpError(
       err, 500
-      //"Creation of route type Failed", 500
     );
     return error;
   }
@@ -134,11 +129,11 @@ const deleteRoute = async(req, res, next) => {
     route = await Route.findById(rid);
     user = await User.findById(route.user);
   }catch(err) {
-    throw new HttpError('Server error', 500);
+    return next(new HttpError('Server error', 500));
   }
 
   if (!route) {
-    throw new HttpError('Route does not exist', 401);
+    return next(new HttpError('Route does not exist', 401));
   }
 
   try {
@@ -152,7 +147,6 @@ const deleteRoute = async(req, res, next) => {
     }
 
     await user.save({ session: sess });
-
     await sess.commitTransaction();
   } catch(err) {
     const error = new HttpError(err, 500);
